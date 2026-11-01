@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Молочка — КР РОАГ</title>
+<meta name="description" content="Практическое приложение по болезням молочной железы по КР РОАГ 2024 (ID 858_1, ID 598) + BI-RADS тренажёр">
+<meta name="theme-color" content="#0f3d5e">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+:root{
+  --bg:#f4f6f8; --card:#ffffff; --ink:#0a0a0a; --ink2:#1f2a33; --line:#9aa7b2;
+  --brand:#0f3d5e; --brand-ink:#ffffff; --accent:#c2185b;
+  --red:#b00020; --red-bg:#fde7ea; --amb:#7a4a00; --amb-bg:#fff1d6;
+  --ok:#0b5d1e; --ok-bg:#e3f5e7; --info:#0b3d91; --info-bg:#e6efff;
+  --chip:#e9eef2; --chip-on:#0f3d5e; --chip-on-ink:#fff;
+  --q-bg:#f3f0e6; --q-ink:#1a1a1a;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0c1116; --card:#151c23; --ink:#ffffff; --ink2:#e6edf3; --line:#5b6b78;
+    --brand:#7fc4ff; --brand-ink:#04121e; --accent:#ff7fb0;
+    --red:#ff9aa5; --red-bg:#3a0d14; --amb:#ffd27a; --amb-bg:#3a2a07; --ok:#8ff0a4; --ok-bg:#0d3318;
+    --info:#a9c8ff; --info-bg:#0e2547; --chip:#24303b; --chip-on:#7fc4ff; --chip-on-ink:#04121e;
+    --q-bg:#22201a; --q-ink:#f5f1e6;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+header{background:#0f3d5e;color:#fff;padding:12px 16px 0;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+header h1{margin:0;font-size:19px;font-weight:800;letter-spacing:.2px}
+header .sub{font-size:12.5px;color:#e8f3ff;margin-top:2px}
+nav{display:flex;gap:4px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;border:0;background:transparent;color:#d9ecff;font:700 14.5px system-ui;padding:10px 12px;border-bottom:3px solid transparent;cursor:pointer}
+nav button.on{color:#fff;border-bottom-color:#ffb3d1}
+main{max-width:900px;margin:0 auto;padding:14px 16px 90px}
+.tab{display:none}.tab.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 14px}
+h2{font-size:18px;margin:0 0 10px;color:var(--ink)}
+h3{font-size:16px;margin:14px 0 8px;color:var(--ink)}
+.lbl{font-weight:700;font-size:14px;margin:12px 0 6px;color:var(--ink2)}
+.lbl:first-child{margin-top:0}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:600 14px system-ui;padding:8px 11px;border-radius:999px;cursor:pointer}
+.seg button.on{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
+.chk{display:flex;flex-wrap:wrap;gap:6px}
+.chk label{display:flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--chip);border-radius:10px;padding:7px 10px;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink)}
+.chk input{width:18px;height:18px;accent-color:#c2185b}
+input[type=number],select{font:600 16px system-ui;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:110px}
+select{width:auto;max-width:100%}
+input[type=range]{width:100%;accent-color:#c2185b}
+.sec{border-radius:12px;padding:12px 14px;margin:0 0 12px;border:1.5px solid}
+.sec h4{margin:0 0 8px;font-size:15.5px}
+.sec.red{background:var(--red-bg);border-color:var(--red)} .sec.red h4{color:var(--red)}
+.sec.amb{background:var(--amb-bg);border-color:var(--amb)} .sec.amb h4{color:var(--amb)}
+.sec.ok{background:var(--ok-bg);border-color:var(--ok)} .sec.ok h4{color:var(--ok)}
+.sec.info{background:var(--info-bg);border-color:var(--info)} .sec.info h4{color:var(--info)}
+.sec.plain{background:var(--card);border-color:var(--line)}
+.rec{margin:0 0 8px;padding:0 0 8px;border-bottom:1px dashed var(--line);color:var(--ink)}
+.rec:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.rec .rt{font-size:15px}
+.rec.off .rt{text-decoration:line-through;opacity:.85}
+.gr{display:inline-block;font:800 11.5px system-ui;padding:2px 6px;border-radius:6px;margin-left:6px;vertical-align:1px;border:1.5px solid}
+.gA{background:#0b5d1e;color:#fff;border-color:#0b5d1e}
+.gB{background:#0b3d91;color:#fff;border-color:#0b3d91}
+.gC{background:#fff;color:#111;border-color:#111}
+.gX{background:#5a5a5a;color:#fff;border-color:#5a5a5a}
+details{margin-top:4px}
+summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--info);list-style:none}
+summary::before{content:"▸ "} details[open] summary::before{content:"▾ "}
+blockquote{margin:6px 0 0;padding:8px 10px;background:var(--q-bg);color:var(--q-ink);border-left:4px solid var(--accent);border-radius:6px;font-size:14px}
+blockquote cite{display:block;margin-top:4px;font-style:normal;font-weight:700;font-size:12px}
+.note{font-size:13.5px;color:var(--ink2)}
+.warn{font-weight:700;color:var(--red)}
+.dose{font-weight:700}
+table{border-collapse:collapse;width:100%;font-size:14px;color:var(--ink)}
+th,td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{background:var(--chip)}
+.tblwrap{overflow-x:auto}
+.btn{border:0;background:#0f3d5e;color:#fff;font:700 15px system-ui;padding:11px 16px;border-radius:10px;cursor:pointer}
+.btn.alt{background:var(--chip);color:var(--ink);border:1.5px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12.5px;font-weight:800}
+.p-ag{background:#0b5d1e;color:#fff}.p-onc{background:#b00020;color:#fff}.p-mid{background:#7a4a00;color:#fff}
+.bir{display:grid;grid-template-columns:62px 1fr;gap:0;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.bir .n{display:flex;align-items:center;justify-content:center;font:900 24px system-ui;color:#fff}
+.bir .t{padding:9px 11px;background:var(--card)}
+.c0{background:#4b5563}.c1{background:#0b5d1e}.c2{background:#2e7d32}.c3{background:#a15c00}.c4{background:#c62828}.c5{background:#7f0000}.c6{background:#311b92}
+/* trainer */
+.case-img{background:#000;border-radius:10px;overflow:hidden;line-height:0;border:1.5px solid #000}
+.case-img svg{width:100%;height:auto;display:block}
+.opts{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.opts button{font:900 20px system-ui;padding:12px 0;border-radius:10px;border:2px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer}
+.topts{display:grid;gap:6px}
+.topts button{text-align:left;font:600 14.5px system-ui;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer}
+.opts button.right,.topts button.right{background:#0b5d1e;color:#fff;border-color:#0b5d1e}
+.opts button.wrong,.topts button.wrong{background:#b00020;color:#fff;border-color:#b00020}
+.opts button:disabled,.topts button:disabled{cursor:default}
+.score{font-weight:800}
+.copybar{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1.5px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none;justify-content:center;gap:10px;z-index:9}
+.copybar.on{display:flex}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:9px 14px;border-radius:9px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:20}
+.toast.on{opacity:1}
+footer{font-size:12.5px;color:var(--ink2);padding:6px 0 0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Молочка · болезни молочной железы</h1>
+  <div class="sub">КР РОАГ 2024: «Воспалительные заболевания МЖ» (ID 858_1) · «ДДМЖ» (ID 598)</div>
+  <nav id="nav">
+    <button data-t="mast" class="on">Мастит</button>
+    <button data-t="ddmzh">ДДМЖ: маршрут</button>
+    <button data-t="pain">Масталгия</button>
+    <button data-t="birads">BI-RADS</button>
+    <button data-t="train">Тренажёр BI-RADS</button>
+  </nav>
+</header>
+
+<main>
+<!-- ================= МАСТИТ ================= -->
+<section class="tab on" id="t-mast">
+  <div class="card" id="mast-form"></div>
+  <div id="mast-out"></div>
+</section>
+
+<!-- ================= ДДМЖ ================= -->
+<section class="tab" id="t-ddmzh">
+  <div class="card" id="dd-form"></div>
+  <div id="dd-out"></div>
+</section>
+
+<!-- ================= МАСТАЛГИЯ ================= -->
+<section class="tab" id="t-pain">
+  <div class="card" id="pain-form"></div>
+  <div id="pain-out"></div>
+</section>
+
+<!-- ================= BI-RADS справочник ================= -->
+<section class="tab" id="t-birads"><div id="bir-ref"></div></section>
+
+<!-- ================= ТРЕНАЖЁР ================= -->
+<section class="tab" id="t-train"><div id="trainer"></div></section>
+
+<footer>Инструмент поддержки решений по тексту КР. Не заменяет клиническое мышление и инструкции к препаратам. «#» — применение вне инструкции (off-label), как в КР.</footer>
+</main>
+
+<div class="copybar" id="copybar">
+  <button class="btn" id="copyBtn">Скопировать тактику</button>
+  <button class="btn alt" id="resetBtn">Сброс</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ============ общие хелперы ============ */
+const SRC_M = "КР «Воспалительные заболевания молочных желез» 2024, ID 858_1";
+const SRC_D = "КР «Доброкачественная дисплазия молочной железы» 2024, ID 598";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function badge(g){
+  if(!g) return "";
+  const L=g[0];
+  const cls = L==="A"?"gA":L==="B"?"gB":L==="C"?"gC":"gX";
+  const title = L==="X"?"Не рекомендация КР — пояснение":`УУР ${L}, УДД ${g.slice(1)}`;
+  return `<span class="gr ${cls}" title="${title}">${L==="X"?"инфо":"УУР "+L+" · УДД "+g.slice(1)}</span>`;
+}
+/* rec(текст, уровень, цитата, источник, off) */
+function rec(t, g, q, src, off){
+  return `<div class="rec${off?" off":""}"><div class="rt">${t}${badge(g)}</div>${q?`<details><summary>Цитата КР</summary><blockquote>${q}<cite>${src||""}</cite></blockquote></details>`:""}</div>`;
+}
+function sec(title, tone, items){
+  items = items.filter(Boolean);
+  if(!items.length) return "";
+  return `<div class="sec ${tone}"><h4>${title}</h4>${items.join("")}</div>`;
+}
+function seg(key, opts, st){
+  return `<div class="seg" data-k="${key}">${opts.map(([v,l])=>`<button type="button" data-v="${v}" class="${String(st[key])===String(v)?"on":""}">${l}</button>`).join("")}</div>`;
+}
+function chk(key, label, st){
+  return `<label><input type="checkbox" data-c="${key}" ${st[key]?"checked":""}> ${label}</label>`;
+}
+function bindForm(el, st, rerender){
+  el.addEventListener("click", e=>{
+    const b=e.target.closest(".seg button"); if(!b) return;
+    const k=b.parentElement.dataset.k; st[k]=b.dataset.v; rerender();
+  });
+  el.addEventListener("change", e=>{
+    const t=e.target;
+    if(t.dataset.c){ st[t.dataset.c]=t.checked; rerender(); }
+    if(t.dataset.n){ st[t.dataset.n]= t.type==="number"||t.type==="range" ? (t.value===""?"":+t.value) : t.value; rerender(); }
+  });
+  el.addEventListener("input", e=>{
+    const t=e.target;
+    if(t.type==="range" && t.dataset.n){ st[t.dataset.n]=+t.value; const o=document.getElementById(t.dataset.n+"-v"); if(o) o.textContent=t.value; renderOutOnly(); }
+  });
+}
+let renderOutOnly = ()=>{};
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1500);}
+
+/* ============ навигация ============ */
+let curTab="mast";
+document.getElementById("nav").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  curTab=b.dataset.t;
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.id==="t-"+curTab));
+  updCopy(); window.scrollTo({top:0});
+});
+function updCopy(){ document.getElementById("copybar").classList.toggle("on",["mast","ddmzh","pain"].includes(curTab)); }
+updCopy();
+
+function outText(id){
+  const el=document.getElementById(id).cloneNode(true);
+  el.querySelectorAll("details,.gr").forEach(x=>x.remove());
+  let out=[];
+  el.querySelectorAll(".sec").forEach(s=>{
+    out.push(s.querySelector("h4").textContent.toUpperCase());
+    s.querySelectorAll(".rec").forEach(r=>{ if(!r.classList.contains("off")) out.push("— "+r.querySelector(".rt").textContent.trim()); });
+    out.push("");
+  });
+  return out.join("\n").trim();
+}
+document.getElementById("copyBtn").onclick=()=>{
+  const id={mast:"mast-out",ddmzh:"dd-out",pain:"pain-out"}[curTab];
+  const txt=outText(id);
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast("Скопировано")).catch(()=>{
+    const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();toast("Скопировано");
+  });
+};
+document.getElementById("resetBtn").onclick=()=>{
+  if(curTab==="mast"){Object.assign(MS,MS0());renderMast();}
+  if(curTab==="ddmzh"){Object.assign(DS,DS0());renderDD();}
+  if(curTab==="pain"){Object.assign(PS,PS0());renderPain();}
+  toast("Сброшено");
+};
+
+/* =========================================================
+   МАСТИТ (КР 858_1)
+   ========================================================= */
+const MS0=()=>({grp:"lact", form:"mast", time:"start", preterm:false, gbs:false, bilat:false, pcnAllergy:false, mrsa:false, crack:false, candida:false,
+  nl_dis:"no", nl_cav:"none", nl_solid:false, nl_eff:"start", nl_type:"unk", nl_smoke:false, igm_sev:false, igm_cory:false,
+  inf_cav:false, inf_sep:false, ch_comp:false});
+const MS=MS0();
+
+function renderMast(){
+  const f=document.getElementById("mast-form");
+  let h=`<div class="lbl">Группа</div>`+seg("grp",[["lact","Лактационный"],["nonlact","Нелактационный (взрослые)"],["inf","Младенец &lt;2 мес"],["child","Ребёнок &gt;2 мес / подросток"]],MS);
+  if(MS.grp==="lact"){
+    h+=`<div class="lbl">Форма (по Гуртовому)</div>`+seg("form",[["stasis","Лактостаз"],["mast","Серозный / инфильтративный"],["abs","Гнойный / абсцесс"],["phleg","Флегмона / сепсис"]],MS);
+    h+=`<div class="lbl">Этап</div>`+seg("time",[["start","Первичный осмотр"],["c24","Консервативно ≥24 ч без эффекта"],["ab48","АБ ≥48 ч без эффекта"],["d7","≥7–10 сут без эффекта"]],MS);
+    h+=`<div class="lbl">Особенности</div><div class="chk">`+
+      chk("preterm","Ребёнок недоношенный",MS)+chk("gbs","СГВ (β-гемол. стрептококк B)",MS)+chk("bilat","Двусторонний",MS)+
+      chk("pcnAllergy","Аллергия на пенициллины",MS)+chk("mrsa","Высокий риск MRSA",MS)+chk("crack","Инфицированная трещина",MS)+chk("candida","Кандидоз соска",MS)+`</div>`;
+  } else if(MS.grp==="nonlact"){
+    h+=`<div class="lbl">Вариант</div>`+seg("nl_type",[["unk","Неуточнённый / ПДМ"],["igm","ИГМ (гранулематозный)"],["tb","Подозрение на туберкулёзный"]],MS);
+    h+=`<div class="lbl">Отделяемое из соска</div>`+seg("nl_dis",[["no","Нет"],["yes","Есть"]],MS);
+    h+=`<div class="lbl">Полость по УЗИ (киста / абсцесс)</div>`+seg("nl_cav",[["none","Нет"],["lt1","&lt;1 см"],["ge1","≥1 см"]],MS);
+    h+=`<div class="lbl">Ответ на лечение</div>`+seg("nl_eff",[["start","Старт"],["noeff","Нет эффекта АБ"],["d7","Нет эффекта 7–10 сут"],["recur","Рецидивирующий"]],MS);
+    h+=`<div class="lbl">Дополнительно</div><div class="chk">`+chk("nl_solid","Плотное (солидное) образование",MS)+chk("nl_smoke","Курит",MS)+chk("pcnAllergy","Аллергия на пенициллины",MS)+chk("mrsa","Риск MRSA",MS);
+    if(MS.nl_type==="igm") h+=chk("igm_sev","Множ. очаги &gt;5 см / двусторонний / изъязвление / свищи",MS)+chk("igm_cory","Corynebacterium в монокультуре",MS);
+    h+=`</div>`;
+  } else if(MS.grp==="inf"){
+    h+=`<div class="lbl">Находки</div><div class="chk">`+chk("inf_cav","Полость &gt;1 см (абсцесс)",MS)+chk("inf_sep","Септические проявления",MS)+`</div>`;
+  } else {
+    h+=`<div class="lbl">Течение</div><div class="chk">`+chk("ch_comp","Осложнённое (лихорадка, системные симптомы, абсцесс, рецидив)",MS)+`</div>`;
+  }
+  f.innerHTML=h;
+  mastOut();
+}
+
+function mastOut(){
+  const o=document.getElementById("mast-out");
+  const s=MS; let H="";
+  if(s.grp==="lact") H=mastLact(s);
+  else if(s.grp==="nonlact") H=mastNonLact(s);
+  else if(s.grp==="inf") H=mastInf(s);
+  else H=mastChild(s);
+  o.innerHTML=H;
+}
+
+function abSchemes(s, lact){
+  const r=[];
+  if(s.pcnAllergy){
+    r.push(rec(`<span class="dose">Клиндамицин** 300 мг каждые 8 ч внутрь</span> — при аллергии на бета-лактамы (взрослые и дети &gt;12 лет)`,"C5",
+      "При аллергической реакции на бета-лактамные антибактериальные препараты (пенициллины) альтернативным препаратом для взрослых и детей старше 12 лет является клиндамицин** 300 мг каждые 8 часов внутрь.",SRC_M+", разд. 3.2"));
+  } else {
+    r.push(rec(`<span class="dose">Амоксициллин + клавулановая кислота 875+125 мг каждые 12 ч внутрь</span> (&gt;12 лет и &gt;40 кг) — эмпирически`,"C5",
+      "Эмпирическая антибактериальная терапия мастита: Амоксициллин + [Клавулановая кислота] для пациентов в возрасте старше 12 лет и массой тела более 40 кг 875+125 мг каждые 12 часов внутрь…",SRC_M+", разд. 3.2"));
+    if(lact) r.push(rec(`Альтернатива первой линии при лактационном: <span class="dose">цефалоспорины I–II поколения</span>`,"C5",
+      "При лактационном мастите цефалоспорины первого и второго поколения также одобрены в качестве терапии первой линии.",SRC_M+", разд. 3.2"));
+    else r.push(rec(`Альтернатива при нелактационном (подозрение на анаэробы): <span class="dose">амоксициллин** 500 мг каждые 6 ч + #метронидазол** 500 мг каждые 8 ч внутрь</span>`,"C5",
+      "Альтернативная схема лечения при нелактационном мастите: для взрослых и детей массой тела свыше 40 кг амоксициллин** 500 мг каждые 6 часов внутрь + #метронидазол** 500 мг каждые 8 часов внутрь…",SRC_M+", разд. 3.2"));
+  }
+  if(s.mrsa) r.push(rec(`Высокий риск MRSA: <span class="dose">доксициклин** 100 мг каждые 12 ч внутрь</span>${lact?` <span class="warn">— КР не делает оговорки по лактации; сверить с инструкцией (тетрациклины при ГВ).</span>`:""}`,"C5",
+      "При высоком риске инфекции, вызванной метициллинрезистентным золотистым стафилококком (MRSA), рекомендован прием доксициклина** 100 мг каждые 12 часов внутрь.",SRC_M+", разд. 3.2"));
+  return r;
+}
+
+function mastLact(s){
+  let H="";
+  const abs = s.form==="abs"||s.form==="phleg";
+  const isMast = s.form!=="stasis";
+  const needAB = isMast || s.time!=="start";
+  // где лечить
+  const hosp = abs || (s.time!=="start" && s.time!=="c24") ;
+  const hospItems=[];
+  if(s.form==="phleg") hospItems.push(rec(`<b>Флегмонозная форма — риск генерализации и сепсиса.</b> Экстренная госпитализация, хирург.`,"X",
+    "Наиболее тяжелая форма - флегмонозный мастит, при котором возможна генерализация инфекции с переходом в сепсис.",SRC_M+", разд. 1.2"));
+  if(abs) hospItems.push(rec(`Гнойная форма → <b>экстренная госпитализация</b>, консультация хирурга`,"C5",
+    "Показания для экстренной госпитализации: отсутствие положительной динамики в течение 24 часов амбулаторного лечения; гнойные формы мастита.",SRC_M+", разд. 6"));
+  else if(hosp) hospItems.push(rec(`Нет положительной динамики ≥24 ч амбулаторного лечения → <b>экстренная госпитализация</b>`,"C5",
+    "Показания для экстренной госпитализации: отсутствие положительной динамики в течение 24 часов амбулаторного лечения; гнойные формы мастита.",SRC_M+", разд. 6"));
+  else hospItems.push(rec(`Лечение возможно <b>амбулаторно</b>. Госпитализация — при гнойной форме или если нет динамики за 24 ч амбулаторного лечения`,"C5",
+    "Возможно лечение в амбулаторных условиях. Показания для экстренной госпитализации: отсутствие положительной динамики в течение 24 часов амбулаторного лечения; гнойные формы мастита.",SRC_M+", разд. 6"));
+  H+=sec("Где лечить", (abs||hosp)?"red":"ok", hospItems);
+
+  // ГВ
+  const stopGV = s.preterm||s.gbs||s.bilat;
+  const gv=[];
+  if(stopGV){
+    const why=[s.preterm&&"недоношенный ребёнок",s.gbs&&"СГВ",s.bilat&&"двусторонний мастит"].filter(Boolean).join(", ");
+    gv.push(rec(`<b>Временно прекратить лактацию</b> (${why}). Сцеживание — по решению врача`,"C5",
+      "Рекомендовано временное прекращение лактации при мастите и кормлении недоношенного ребенка, при мастите с редкими инфекциями, вызванными β-гемолитическим стрептококком группы B, и двусторонним маститом.",SRC_M+", разд. 3.1"));
+  } else {
+    gv.push(rec(`<b>Продолжать грудное вскармливание</b>, доношенного не отлучать. Мастит (в т.ч. гнойный) — не повод для смеси`,"C5",
+      "Рекомендовано всем продолжать грудное вскармливание, не отлучать от груди доношенных детей.",SRC_M+", разд. 3.1"));
+    gv.push(rec(`Начинать кормление с поражённой железы, кормить чаще`,"C5",
+      "Следует поощрять матерей к более частому кормлению грудью, начиная с пораженной груди.",SRC_M+", разд. 3.1, комм."));
+  }
+  H+=sec("Грудное вскармливание", stopGV?"amb":"ok", gv);
+
+  // немедикаментозно
+  H+=sec("Немедикаментозно","plain",[
+    rec(`Частое и эффективное опорожнение: <b>сцеживание</b> после кормления (руками / молокоотсос)`,"C5",
+      "Рекомендовано всем пациенткам сцеживание молока при лактостазе. …при лактостазе наиболее важным этапом лечения является частое и эффективное удаление молока.",SRC_M+", разд. 3.1"),
+    rec(`<b>Самомассаж</b> МЖ по направлению к соску — без боли и сильного давления`,"B3",
+      "Рекомендовано всем пациенткам выполнять самомассаж молочных желез с целью снижения болевого синдрома. …Следует избегать болезненного массажа и всех форм сильного давления…",SRC_M+", разд. 3.1"),
+    rec(`<b>Тепло до</b> кормления/сцеживания, <b>холод после</b>`,"B2",
+      "Рекомендовано при лактации использовать холодные и горячие компрессы… Целесообразно применение душа или горячего компресса – непосредственно перед кормлением… После кормления… холодные компрессы…",SRC_M+", разд. 5"),
+    rec(`<b>Не</b> использовать накладки на соски для лечения воспаления`,"C5",
+      "Не рекомендовано всем пациенткам использование накладок на соски для лечения воспаления.",SRC_M+", разд. 3.1"),
+    rec(`Обучение технике кормления и уходу за МЖ (консультант по ГВ)`,"C5",
+      "Рекомендовано обучать родильницу правильному уходу за молочными железами, технике кормления ребенка.",SRC_M+", разд. 5")
+  ]);
+
+  // обследование
+  const dx=[];
+  dx.push(rec(`Осмотр и пальпация МЖ и подмышечной зоны; в документации — локализация, размер, консистенция, связь с кожей`,"C5",
+    "Рекомендовано проведение осмотра и пальпации молочных желез всем пациенткам с воспалительным заболеванием молочных желез…",SRC_M+", разд. 2.2"));
+  if(isMast||s.time!=="start") dx.push(rec(`<b>Посев молока</b> (аэробы и факультативные анаэробы) с чувствительностью — <b>до начала АБ</b>, из поражённой и здоровой железы`,"B2",
+    "Рекомендовано проводить микробиологическое (культуральное) исследование грудного молока… Бактериологическое исследование молока… желательно проводить до начала антибактериальной терапии. Молоко для исследования берут из пораженной и здоровой молочной железы.",SRC_M+", разд. 2.3"));
+  if(abs||s.time==="ab48"||s.time==="d7") dx.push(rec(`<b>УЗИ молочных желез</b> — подозрение на абсцесс / нет эффекта`,"C5",
+    "Рекомендовано проведение ультразвукового исследования (УЗИ) молочных желез взрослым пациенткам… при подозрении на наличие абсцесса МЖ, новообразования МЖ… отсутствии эффекта от лечения…",SRC_M+", разд. 2.4"));
+  if(s.time==="ab48"||s.time==="d7") dx.push(rec(`<b>ОАК</b> — нет эффекта от эмпирической АБ и гипертермия 24–48 ч`,"C5",
+    "Рекомендовано всем пациенткам проведение общего (клинического) анализа крови при отсутствии эффекта при назначении эмпирической антибактериальной терапии и сохранении гипертермии в течение 24-48 часов.",SRC_M+", разд. 2.3"));
+  if(s.time==="ab48"||s.time==="d7") dx.push(rec(`Микроскопия по Граму + посев отделяемого / пунктата с чувствительностью → <b>коррекция АБ</b>`,"C5",
+    "Рекомендовано проведение микроскопического с окраской по Граму и микробиологического исследования, отделяемого из молочных желез или материала, полученного при тонкоигольной аспирационной биопсии… у пациенток… и отсутствием эффекта от лечения антибактериальными препаратами…",SRC_M+", разд. 2.3"));
+  if(s.time==="d7") dx.push(rec(`<b>7–10 сут без эффекта → исключить онкологию</b>: ММГ (с контрастированием) / МРТ с КУ, трепанбиопсия; посев секрета, исключить специфический процесс`,"C5",
+    "В процессе динамического наблюдения при отсутствии положительного эффекта от противовоспалительной терапии в течение 7-10 дней показано исключение онкологического процесса (проведение трепанбиопсии)…",SRC_M+", разд. 2.3, комм."));
+  if(s.time==="d7") dx.push(rec(`МРТ МЖ с контрастированием — для дифдиагноза со ЗНО (ГВ можно возобновить через 24 ч после МРКС)`,"C5",
+    "…грудное вскармливание после внутривенного введения МРКС безопасно и может быть возобновлено через 24 часа после инъекции.",SRC_M+", разд. 2.4"));
+  H+=sec("Обследование","info",dx);
+
+  // АБ
+  const ab=[];
+  if(needAB){
+    if(s.form==="stasis") ab.push(rec(`Лактостаз без эффекта ≥24 ч консервативных мер → <b>добавить АБ</b>`,"X",
+      "При сохранении симптомов в течение 24 часов после начала вышеперечисленных действий в дополнение назначается антибактериальная терапия.",SRC_M+", Прил. В"));
+    else ab.push(rec(`<b>Антибактериальная терапия показана</b> + консервативные мероприятия`,"C5",
+      "Рекомендовано проведение антибактериальной терапии у пациенток с воспалительным заболеванием молочных желез.",SRC_M+", разд. 3.2"));
+    ab.push(...abSchemes(s,true));
+    if(s.time==="ab48"||s.time==="d7") ab.push(rec(`<b>Смена АБ по чувствительности</b> (пенициллины, цефалоспорины, макролиды, линкозамиды и др.)`,"C5",
+      "С учетом чувствительности этиологического агента по результатам микробиологического исследования возможно назначения препаратов следующих групп…",SRC_M+", разд. 3.2"));
+    ab.push(rec(`<b>Пробиотики с лактобациллами</b> при лактационном мастите`,"B2",
+      "Рекомендовано при лактационном мастите назначение пробиотиков, содержащих лактобактерии (по АТХ - Лактобациллы).",SRC_M+", разд. 3.2"));
+  } else {
+    ab.push(rec(`Лактостаз, первичный осмотр: <b>АБ пока не нужны</b> — консервативно 24 ч, затем переоценка`,"X",
+      "Лактостаз → Консервативные мероприятия (консультирование, массаж, сцеживание, компрессы) → Отсутствие эффекта в течение 24 ч → Дообследование.",SRC_M+", Прил. Б"));
+  }
+  ab.push(rec(`<b>НПВС</b> — уменьшение отёка, воспаления и боли`,"C5",
+    "Рекомендовано у взрослых пациентов с маститом для уменьшения проявлений воспаления и купирования боли применение НПВС…",SRC_M+", разд. 3.2"));
+  H+=sec("Медикаменты", needAB?"amb":"plain", ab);
+
+  // хирургия
+  if(abs){
+    H+=sec("Абсцесс — хирургическая тактика","red",[
+      rec(`Консультация хирурга, госпитализация`,"X","Абсцесс → Консультация хирурга, госпитализация в стационар.",SRC_M+", Прил. Б"),
+      rec(`Первично — <b>пункция/санация под УЗИ</b> на фоне АБ (≈81% выздоровления); дренаж-выпускник ≤2 сут`,"A1",
+        "Пункция абсцесса молочной железы с эвакуацией содержимого на фоне антибактериальной терапии приводит к выздоровлению подавляющего числа (81%) пациентов. При необходимости дренирования абсцесса рекомендована установка выпускника на короткие сроки (не более 2-х суток).",SRC_M+", разд. 3.3"),
+      rec(`Нет эффекта малоинвазивных методов / рецидив → <b>вскрытие и санация абсцесса</b>`,"A1",
+        "В случае отсутствия эффекта от малоинвазивных методов лечения или рецидива заболевания показано хирургическое вмешательство – вскрытие и санация абсцесса (при лактационном мастите)…",SRC_M+", разд. 3.3")
+    ]);
+  }
+  // соски
+  const nip=[];
+  if(s.crack) nip.push(rec(`Инфицированная трещина → АБ, <b>предпочтительно местно</b>`,"C5",
+    "Рекомендовано назначение антибактериальной терапии при инфицированной трещине соска. …Предпочтительно применение местных антибактериальных средств.",SRC_M+", разд. 3.2"));
+  if(s.crack) nip.push(rec(`<b>Не</b>: глицерол, спиртосодержащие растворы, парафиновые мази. Физиотерапия (лазер/фото) — можно`,"C5",
+    "Не рекомендовано использование глицерола… Не рекомендовано для лечения трещин соска использование в период лактации спиртосодержащих растворов…, кремов, мазей на основе парафина…",SRC_M+", разд. 3.1–3.2"));
+  if(s.candida) nip.push(rec(`Кандидоз: <span class="dose">клотримазол или миконазол на соски после каждого кормления (или каждые 3–4 ч), 1 нед</span>; при открытых трещинах + <span class="dose">мупироцин 2% до 3 р/сут 10 дней</span>. Лечить мать и ребёнка ≥1 нед`,"C5",
+    "Клотримазол или миконазол следует наносить на соски после каждого кормления, или каждые 3–4 часа, в течение недели… И мать, и ребенок должны лечиться в течение недели или дольше. …мупироцином (2% мазь до 3 раза в сутки в течение 10 дней).",SRC_M+", разд. 3.2"));
+  H+=sec("Соски","plain",nip);
+
+  // коды
+  const codes=[];
+  if(s.form==="stasis") codes.push("лактостаз — отдельный код в КР не указан");
+  if(s.form==="mast") codes.push("<b>O91.2</b> Негнойный мастит, связанный с деторождением");
+  if(abs) codes.push("<b>O91.1</b> Абсцесс молочной железы, связанный с деторождением");
+  if(s.crack) codes.push("<b>O91.0</b> Инфекции соска, связанные с деторождением / <b>O92.1</b> трещина соска");
+  H+=sec("МКБ-10 (из КР)","plain",[rec(codes.join("<br>"),"","")]);
+
+  H+=sec("Выписка из стационара","plain",[rec(`Регресс клинических и УЗ-симптомов, нет осложнений. После лечения — консультация физиотерапевта (реабилитация)`,"C5",
+    "Показания к выписке пациентки из стационара: регресс клинических симптомов; регресс ультразвуковых симптомов; отсутствие осложнений. …Рекомендована консультация врача-физиотерапевта всем пациенткам после лечения острого воспалительного заболевания МЖ…",SRC_M+", разд. 4, 6")]);
+  return H;
+}
+
+function mastNonLact(s){
+  let H="";
+  if(s.nl_type==="tb"){
+    H+=sec("Подозрение на туберкулёзный мастит","red",[
+      rec(`Для подтверждения: <b>1–2 образца ткани МЖ и/или подмышечной области</b> на КУБ и микробиологию (гной/дренаж недостаточны). Пункция и очага, и аномальных ЛУ`,"C5",
+        "Для подтверждения туберкулезной этиологии мастита один или два образца ткани МЖ и/или подмышечной впадины следует отправить на анализ на кислотоустойчивые бактерии и микробиологическое исследование.",SRC_M+", разд. 2.3"),
+      rec(`Выявить эпидемиологический риск (особенно при полостях/свищах и неэффективности АБ)`,"C5",
+        "Рекомендовано выявлять эпидемиологический риск заболевания у взрослых пациенток с поражением молочных желез при отсутствии эффекта от лечения антибактериальными препаратами, особенно при наличии полостей или свищевых ходов…",SRC_M+", разд. 2.5"),
+      rec(`<b>Рутинная АБ не рекомендована</b>; подтверждён → лечение у <b>фтизиатра</b>`,"C5",
+        "Не рекомендовано рутинное применение антибактериальной терапии для лечения специфического мастита (туберкулез, паразитарные кисты) у взрослых. …Пациенту с туберкулезным маститом проводят лечение под контролем фтизиатра…",SRC_M+", разд. 3.2")
+    ]);
+    return H;
+  }
+  // алгоритм
+  const a=[];
+  a.push(rec(`Анамнез (курение, лактация, операции на МЖ, РМЖ у родственников 1-й линии), осмотр, <b>УЗИ МЖ</b>`,"C5",
+    "Пациент с нелактационным маститом → Сбор анамнеза, физикальное обследование, УЗИ молочных желез.",SRC_M+", Прил. Б (алгоритм 2)"));
+  if(s.nl_dis==="yes") a.push(rec(`Есть отделяемое → <b>мазок-отпечаток на цитологию</b> → АБ`,"C5",
+    "Рекомендовано взятие мазка-отпечатка у пациенток с наличием выделений из соска молочных желез для проведения цитологического исследования и выявления элементов воспаления.",SRC_M+", разд. 2.3"));
+  if(s.nl_cav==="lt1") a.push(rec(`Полость &lt;1 см → <b>АБ + НПВС</b>, динамика`,"X","Полость (киста / абсцесс МЖ) <1 см → АБ-терапия, нестероидные противовоспалительные и противоревматические препараты.",SRC_M+", Прил. Б"));
+  if(s.nl_cav==="ge1") a.push(rec(`Полость ≥1 см → <b>ТАБ под УЗИ, санация полости, АБ</b>. Промывание: <span class="dose">хлоргексидин** 0,5% водный + NaCl 0,9% 1:10</span>; густой гной — #химотрипсин, повторная пункция через 24–48 ч. Прокол не через ареолу/сосок`,"C5",
+    "…санацию очага воспаления с промыванием полости антисептическими растворами… (хлоргексидина** водный раствор 0,5% + раствор натрия хлорида** 0,9% в соотношении 1:10)… При наличии густого гнойного отделяемого возможности введение в полость гнойного очага протеолитического фермента (#химотрипсин) с повторной пункцией через 24-48 часов.",SRC_M+", разд. 3.2"));
+  if(s.nl_dis==="no" && s.nl_cav==="none" && !s.nl_solid) a.push(rec(`Нет отделяемого и полости → <b>АБ</b>; нет эффекта → ТАБ (цитология, Грам, посев)`,"X","Отделяемое из МЖ — нет → АБ-терапия → Нет эффекта → ТАБ, цитологическое иссл., мазок по Граму, посев + чув-ть к а/б, коррекция лечения.",SRC_M+", Прил. Б"));
+  if(s.nl_solid) a.push(rec(`Плотное (солидное) образование без жидкости → <b>трепанбиопсия под УЗИ</b> — исключить ЗНО`,"C5",
+    "Рекомендовано проведение трепанбиопсии… под контролем УЗИ у взрослых пациенток при отсутствии выделений из соска, отсутствии жидкостного, но наличии плотного (солидного) образования МЖ с целью верификации диагноза и исключения злокачественного новообразования.",SRC_M+", разд. 2.4"));
+  H+=sec("Алгоритм (Прил. Б)","info",a);
+
+  // АБ
+  const ab=[rec(`<b>Антибактериальная терапия</b>`,"C5","Рекомендовано проведение антибактериальной терапии у пациенток с воспалительным заболеванием молочных желез.",SRC_M+", разд. 3.2"), ...abSchemes(s,false),
+    rec(`<b>НПВС</b>`,"C5","Рекомендовано у взрослых пациентов с маститом для уменьшения проявлений воспаления и купирования боли применение НПВС…",SRC_M+", разд. 3.2")];
+  if(s.nl_type==="igm" && !s.igm_cory) ab[0]=rec(`ИГМ: АБ — <b>только при вторичной инфекции и абсцессе</b>, по посеву; + дренирование`,"C5",
+    "Рекомендована антибактериальная терапия у взрослых пациентов с идиопатическим гранулематозным маститом, осложненным вторичной инфекцией и абсцессом.",SRC_M+", разд. 3.2");
+  H+=sec("Медикаменты","amb",ab);
+
+  // эскалация
+  const esc_=[];
+  if(s.nl_eff!=="start") esc_.push(rec(`Нет эффекта → <b>Грам + посев</b> с чувствительностью → коррекция АБ`,"C5",
+    "Рекомендовано проведение микроскопического с окраской по Граму и микробиологического исследования… с определением чувствительности к антибактериальным препаратам у пациенток… и отсутствием эффекта от лечения антибактериальными препаратами…",SRC_M+", разд. 2.3"));
+  if(s.nl_eff==="d7"||s.nl_eff==="recur") esc_.push(rec(`<b>Трепанбиопсия</b>, ММГ с контрастированием / МРТ с КУ — исключить ЗНО`,"C5",
+    "При отсутствии эффекта от проводимого лечения через 7 дней проводится дополнительная диагностика для исключения онкологического процесса (маммография с контрастированием и трепанбиопсия)…",SRC_M+", разд. 3.2"));
+  if(s.nl_eff==="d7"||s.nl_eff==="recur") esc_.push(rec(`МРТ МЖ с контрастированием — дифдиагноз со ЗНО`,"C5","Рекомендовано проведение МРТ молочной железы с контрастированием при необходимости дифференциальной диагностики лактационного/нелактационного мастита со злокачественным новообразованием…",SRC_M+", разд. 2.4"));
+  if(s.nl_eff==="recur") esc_.push(rec(`Рецидив → микроскопия, <b>КУБ</b> и посев <b>биоптата</b> (ИГМ, туберкулёз). Сообщить лаборатории о возможной <i>Corynebacterium</i>`,"C5",
+    "Рекомендовано при рецидивирующем воспалительном процессе молочных желез у пациенток взрослого возраста проведение микроскопического исследования, анализа на кислотоустойчивые бактерии и микробиологического исследования биоптата…",SRC_M+", разд. 2.3"));
+  if(s.nl_eff==="recur"||s.nl_eff==="d7") esc_.push(rec(`Осложнения (абсцесс, свищ) при неэффективности консервативного → <b>хирургия</b>: резекция МЖ после купирования острого воспаления; свищ — иссечение хода с протоком`,"A1",
+    "Рекомендовано проведение хирургического лечения у всех пациенток с осложнениями лактационного/нелактационного мастита (формирование абсцесса или свища) при неэффективности консервативного лечения. …При нелактационном мастите операцию необходимо выполнять при купировании симптомов острого воспаления.",SRC_M+", разд. 3.3"));
+  H+=sec("Если нет эффекта","red",esc_);
+
+  if(s.nl_type==="igm"){
+    const ig=[];
+    if(s.igm_sev) ig.push(rec(`<b>ГКС системно:</b> <span class="dose">преднизолон** 0,5–1 мг/кг/сут</span>; снижение после ухода эритемы и боли (обычно через 4 нед) постепенно за 8–12 дней. Обострение на ГКС → <span class="dose">+ #метотрексат** 10–15 мг/нед</span> (повышать на 2,5–5 мг; после ремиссии снижать ежемесячно 12 мес)`,"C5",
+      "Рекомендован прием кортикостероидов системного действия для лечения идиопатического гранулематозного мастита у взрослых пациентов с множественными поражениями диаметром более 5 см, двусторонними поражениями, значительным изъязвлением кожи, свищами. …Применяют преднизолон** 0,5-1 мг/кг/сут…",SRC_M+", разд. 3.2"));
+    else ig.push(rec(`Локализованная стадия (узел &lt;5 см) — клиническое и УЗ-наблюдение; ГКС — при множественных &gt;5 см, двусторонних, изъязвлении, свищах`,"X","Локализованная стадия: узловое образование менее 5 см… → Клиническое наблюдение и УЗ-мониторинг.",SRC_M+", Прил. Б (ИГМ)"));
+    if(s.igm_cory) ig.push(rec(`<i>Corynebacterium</i> в монокультуре: <span class="dose">доксициклин** 100 мг каждые 12 ч</span>; нет эффекта → <span class="dose">линезолид** 600 мг ×2 / кларитромицин** 250–1000 мг ×2 / рифампицин** 300 мг ×2</span>, 6–9 мес`,"C5",
+      "В таких случаях рекомендована схема: доксициклин** 100 мг каждые 12 часов внутрь, при отсутствии эффекта – линезолид** 600 мг каждые 12 часов внутрь, кларитромицин** 250-1000 мг каждые 12 часов внутрь, рифампицин** 300 мг 2 раза в день внутрь в течение 6-9 месяцев.",SRC_M+", разд. 3.2"));
+    ig.push(rec(`<b>Рутинная хирургия при ИГМ не рекомендована</b> (медленное заживление, рецидивы как без операции)`,"C5",
+      "Не рекомендовано взрослым пациентам с идиопатическим гранулематозным маститом рутинное проведение хирургического лечения.",SRC_M+", разд. 3.3"));
+    ig.push(rec(`Хирургия при ИГМ — нет эффекта консервативной терапии, рецидивы, абсцессы, свищи, язвы (широкая резекция; лучше с ГКС)`,"B2",
+      "Рекомендовано взрослым пациентам с идиопатическим гранулематозным маститом хирургическое вмешательство при отсутствии эффекта от консервативной терапии, при рецидивирующем течении, при наличии абсцессов, свищей и язв.",SRC_M+", разд. 3.3"));
+    ig.push(rec(`Лаборатория: гиперпролактинемия → бромокриптин (Прил. Б, ИГМ). Исключить ТБ, саркоидоз, грибы, ГПА, РМЖ, инородное тело`,"X",
+      "По результатам исследования необходимо исключать туберкулез, саркоидоз, грибковые заболевания, гистоплазмоз, гранулематоз с полиангиитом, рак молочной железы и инородное тело…",SRC_M+", разд. 2.3"));
+    H+=sec("ИГМ — особенности","amb",ig);
+  }
+  if(s.nl_smoke) H+=sec("Профилактика","plain",[rec(`<b>Отказ от курения</b> — профилактика перидуктального мастита`,"C5","С целью профилактики перидуктального мастита рекомендован отказ от курения всем пациенткам.",SRC_M+", разд. 5")]);
+  H+=sec("МКБ-10","plain",[rec(`<b>N61</b> — воспалительные болезни МЖ (мастит и абсцесс не послеродовой); <b>N64.0</b> — трещина и свищ соска`,"","")]);
+  return H;
+}
+
+function mastInf(s){
+  let H="";
+  H+=sec("Обследование","info",[
+    rec(`<b>ОАК с лейкоформулой</b> — контроль эффективности; при острой воспалительной картине — ежедневный контроль состояния`,"C5",
+      "Рекомендовано младенцам в возрасте до 2 месяцев с маститом проведение общего клинического анализа крови с лейкоцитарной формулой с целью последующего контроля эффективности лечения.",SRC_M+", разд. 7"),
+    rec(`<b>Грам + посев</b> отделяемого / жидкости абсцесса — при отсутствии эффекта`,"C5",
+      "Рекомендовано младенцам в возрасте до 2 месяцев с маститом проведение микроскопического исследования с окраской по Граму и микробиологического исследования (посев)…",SRC_M+", разд. 7"),
+    rec(`Дифдиагноз: физиологическое нагрубание (двустороннее, симметричное, без эритемы и боли, молочные выделения); гемангиомы/лимфангиомы`,"X",
+      "Дифференциальный диагноз мастита у младенцев проводят с физиологическим нагрубанием (физиологической гипертрофией) молочных желез, при которой гипертрофия МЖ обычно двухсторонняя и симметричная…",SRC_M+", разд. 7"),
+    rec(`УЗИ — не обязательно, для уточнения (абсцесс)`,"X","УЗИ молочных желез не является обязательным для постановки диагноза, но может подтвердить диагноз мастита или абсцесса МЖ…",SRC_M+", разд. 7")
+  ]);
+  const t=[rec(`Сначала <b>местные</b> АБ/противомикробные; нет эффекта → <b>системные</b> по посеву. <b>Не сцеживать</b> из соска`,"C5",
+      "Рекомендовано младенцам в возрасте до 2 месяцев с маститом проведение лечения антибактериальными препаратами системного действия и/или антибиотиками и противомикробными препаратами для наружного применения. …исключение сцеживания жидкости из соска.",SRC_M+", разд. 7")];
+  if(s.inf_cav) t.push(rec(`Полость &gt;1 см → <b>тонкоигольная аспирация</b> (санация); &lt;1 см — наблюдение на фоне лечения`,"X",
+      "При наличии полости размером более 1 см в диаметре проводится тонкоигольная биопсия с целью санирования гнойного содержимого, при меньшем размере полости возможно динамическое наблюдение…",SRC_M+", разд. 7"));
+  if(s.inf_sep) t.push(rec(`<b>Септические проявления</b>: покрыть MRSA, MSSA и грам(–): <span class="dose">ванкомицин** / #клиндамицин** + оксациллин** + гентамицин** / цефотаксим** / цефтазидим** / цефтриаксон**</span>`,"X",
+      "При наличии септических проявлений лечение должно охватывать метициллинрезистентный (MRSA) и чувствительный к метициллину золотистый стафилококк, и грамотрицательные микроорганизмы: применяется ванкомицин** / #клиндамицин** + оксациллин** + гентамицин** / цефотаксим** / цефтазидим** / цефтриаксон**.",SRC_M+", разд. 7"));
+  t.push(rec(`Хирургия у детей — только по острой необходимости (риск гипоплазии МЖ, рубцов)`,"X","Любые хирургические манипуляции на МЖ у детей и подростков проводятся только при острой необходимости… из-за потенциальной угрозы гипоплазии МЖ…",SRC_M+", разд. 7"));
+  H+=sec("Лечение", s.inf_sep?"red":"amb", t);
+  H+=sec("МКБ-10","plain",[rec(`<b>P39.0</b> — неонатальный инфекционный мастит`,"","")]);
+  return H;
+}
+
+function mastChild(s){
+  let H="";
+  H+=sec("Обследование","info",[
+    rec(`<b>УЗИ МЖ</b> — основной метод, обязателен для диагностики абсцесса`,"C5","Рекомендовано детям и подросткам с подозрением на мастит проведение УЗИ молочных желез с целью визуализации абсцесса МЖ.",SRC_M+", разд. 7"),
+    s.ch_comp&&rec(`<b>ОАК с лейкоформулой</b> (лихорадка, системные симптомы, абсцесс, рецидив)`,"C5","Рекомендовано детям и подросткам с осложненным течением мастита проведение общего клинического анализа крови с лейкоцитарной формулой (по клиническим показаниям)…",SRC_M+", разд. 7"),
+    s.ch_comp&&rec(`Цитология, Грам, посев отделяемого/абсцесса — при неэффективности лечения`,"C5","Рекомендовано детям и подросткам с осложненным течением мастита проведение цитологического, микроскопического исследования с окраской по Граму и микробиологического исследования (посев)…",SRC_M+", разд. 7"),
+    rec(`Дифдиагноз: ювенильная киста, папилломатоз, телархе (в т.ч. преждевременное), эктазия протоков`,"X","Дифференциальный диагноз мастита у детей и подростков проводится с ювенильной кистой, подростковым папилломатозом и изолированным преждевременным телархе…",SRC_M+", разд. 7")
+  ]);
+  H+=sec("Лечение","amb",[
+    rec(`<b>Системные АБ 5–10 дней</b>; ответ — улучшение за 24–48 ч. После лечебно-диагностической пункции абсцесса — возможны только местные`,"X",
+      "Антимикробная терапия проводится антибактериальнымми препаратами системного действия. У детей и подростков с маститом и абсцессом после лечебно-диагностической пункции возможно назначение только антибактериальных препаратов для местного применения. Курс лечения составляет 5-10 дней.",SRC_M+", разд. 7"),
+    rec(`На фоне кисты: санация очага, местные АБ + НПВС; нет эффекта → системные`,"C5","У подростков с воспалительным процессом на фоне кисты МЖ лечение включает санацию очага воспаления, местную антибактериальную терапию и НПВС…",SRC_M+", разд. 3.2"),
+    rec(`Нет ответа → резистентный возбудитель, мало АБ, абсцесс (остаточный/новый), неверный диагноз`,"X","Отсутствие ответа на лечение может указывать на резистентный патоген, недостаточную концентрацию антибактериального препарата, абсцесс… или неправильный прогноз.",SRC_M+", разд. 7"),
+    rec(`Хирургия — только по острой необходимости`,"X","Любые хирургические манипуляции на МЖ у детей и подростков проводятся только при острой необходимости…",SRC_M+", разд. 7")
+  ]);
+  return H;
+}
+
+bindForm(document.getElementById("mast-form"), MS, renderMast);
+renderMast();
+
+/* =========================================================
+   ДДМЖ — маршрутизация (КР 598)
+   ========================================================= */
+const DS0=()=>({age:35, sit:"screen", preg:false, risk_fam:false, risk_gene:false, risk_rad:false, risk_atyp:false,
+  clin:"low", dis:"path", gal:false, hprl:false, br:"none", dens:"none", cyst:"none"});
+const DS=DS0();
+
+function renderDD(){
+  const f=document.getElementById("dd-form");
+  let h=`<div class="row"><div><div class="lbl">Возраст</div><input type="number" min="10" max="99" data-n="age" value="${DS.age}"></div>
+    <div class="chk" style="margin-top:28px">${chk("preg","Беременна / лактация",DS)}</div></div>`;
+  h+=`<div class="lbl">Повод</div>`+seg("sit",[["screen","Скрининг, жалоб нет"],["mass","Пальпируемое образование"],["dis","Выделения из соска"],["pain","Масталгия"]],DS);
+  if(DS.sit==="mass" && DS.age<30) h+=`<div class="lbl">Клинический риск ЗНО</div>`+seg("clin",[["low","Низкий"],["high","Высокий"]],DS);
+  if(DS.sit==="dis"){
+    h+=`<div class="lbl">Характер выделений</div>`+seg("dis",[["path","Спонтанные, односторонние, из 1 протока, серозные / кровянистые"],["phys","Не спонтанные, из многих протоков, не кровянистые"]],DS);
+    h+=`<div class="chk" style="margin-top:8px">${chk("gal","Молозивоподобные (галакторея)",DS)}${chk("hprl","Гиперпролактинемия подтверждена",DS)}</div>`;
+  }
+  h+=`<div class="lbl">Факторы высокого риска РМЖ</div><div class="chk">`+
+    chk("risk_fam","Родственники 1–2 линии: РМЖ (в т.ч. у мужчин), рак яичников, ПЖ, простаты",DS)+
+    chk("risk_gene","Носительство BRCA1/2, PALB2, TP53, CDH1, PTEN",DS)+
+    chk("risk_rad","Облучение грудной клетки",DS)+chk("risk_atyp","Биопсия/операция по поводу атипической гиперплазии",DS)+`</div>`;
+  h+=`<div class="lbl">Результат визуализации (если есть)</div><div class="row">
+    <select data-n="br"><option value="none">BI-RADS — нет</option>${["0","1","2","3","4","5","6"].map(x=>`<option value="${x}" ${DS.br===x?"selected":""}>BI-RADS ${x}</option>`).join("")}</select>
+    <select data-n="dens"><option value="none">Плотность ACR — нет</option>${["A","B","C","D"].map(x=>`<option value="${x}" ${DS.dens===x?"selected":""}>ACR ${x}</option>`).join("")}</select>
+    <select data-n="cyst"><option value="none">Киста — нет</option>
+      <option value="simple" ${DS.cyst==="simple"?"selected":""}>Простая</option>
+      <option value="tense" ${DS.cyst==="tense"?"selected":""}>Простая напряжённая, болезненная</option>
+      <option value="compl" ${DS.cyst==="compl"?"selected":""}>Осложнённая</option>
+      <option value="complex" ${DS.cyst==="complex"?"selected":""}>Комплексная (сложная)</option></select></div>`;
+  f.innerHTML=h;
+  ddOut();
+}
+
+function ddOut(){
+  const s=DS, a=+s.age||0; let H="";
+  // риск
+  const hiRisk = s.risk_fam||s.risk_gene||s.risk_rad||s.risk_atyp;
+  if(hiRisk){
+    const r=[rec(`<b>Направить к онкологу</b>: дообследование, индивидуальная (селективная) программа скрининга, профилактика`,"C5",
+      "Пациенты с наличием факторов высокого риска развития РМЖ должны быть направлены на консультацию к врачу-онкологу с целью дообследования, подбора индивидуальной (селективной) программы скрининга онкологических заболеваний и проведения профилактических мероприятий.",SRC_D+", разд. 2.1")];
+    if(s.risk_gene) r.push(rec(`Носительница: <b>ежегодно ММГ + МРТ МЖ с 30 лет</b> или на 5 лет раньше самой молодой заболевшей родственницы`,"C5",
+      "Рекомендовано женщинам с носительством патогенных вариантов… проводить селективный скрининг… включающий ежегодные ММГ и МРТ молочной железы, начиная с 30 лет, или на 5 лет раньше возраста наиболее молодой родственницы, заболевшей в семье РМЖ.",SRC_D+", разд. 5.3"));
+    if(s.risk_atyp && a>35) r.push(rec(`&gt;35 лет с атипической гиперплазией — <b>риск-редуцирующие препараты</b> (антиэстрогены) — назначает онколог`,"C5",
+      "Пациенткам с ДДМЖ старше 35 лет с атипической гиперплазией молочных желез рекомендуется прием риск-редуцирующих препаратов (антиэстрогены)…",SRC_D+", разд. 5.2"));
+    H+=sec("Высокий риск РМЖ","red",r);
+  }
+  // осмотр
+  H+=sec("Осмотр","plain",[rec(`Осмотр и пальпация МЖ: <b>5–16 день цикла</b> (лучше до 10-го); не менструирующие — в любой день. Стоя (руки опущены/за головой) + лёжа`,"C5",
+    "Оптимальным сроком для физикального осмотра молочных желез у менструирующих женщин следует считать 5-16 дни менструального цикла (при возможности до 10 дня менструального цикла).",SRC_D+", разд. 2.2")]);
+
+  // визуализация по поводу
+  const v=[];
+  if(s.preg) v.push(rec(`Беременность / лактация → <b>УЗИ МЖ</b>`,"B2","Рекомендуется ультразвуковое исследование молочных желез у взрослых пациенток до 40 лет, пациенток старше 40 лет с развитой железистой тканью, беременных и женщин в период лактации…",SRC_D+", разд. 2.4"));
+  if(s.sit==="screen"){
+    if(a>=40 && a<=75) v.push(rec(`<b>ММГ в 2 проекциях 1 раз в 2 года</b> (профосмотр/диспансеризация, 40–75 лет)`,"C5",
+      "Рекомендовано в рамках проведения профилактического осмотра и диспансеризации выполнение ММГ в двух проекциях женщинам в возрасте от 40 до 75 лет включительно 1 раз в 2 года.",SRC_D+", разд. 5.3"));
+    else if(a<40) v.push(rec(`До 40 лет → <b>УЗИ МЖ</b> как основной метод`,"B2","Рекомендуется ультразвуковое исследование молочных желез у взрослых пациенток до 40 лет…",SRC_D+", разд. 2.4"));
+    else v.push(rec(`Старше 75 — популяционный скрининг КР не регламентирует; по показаниям/жалобам`,"X","…выполнение ММГ в двух проекциях женщинам в возрасте от 40 до 75 лет включительно 1 раз в 2 года.",SRC_D+", разд. 5.3"));
+    if(a>=40) v.push(rec(`При развитой железистой ткани — дополнительно УЗИ`,"C4","Рекомендовано проведение УЗИ молочных желез в качестве дополнительного метода уточняющей диагностики c учетом возраста…",SRC_D+", разд. 5.3"));
+  }
+  if(s.sit==="mass"){
+    if(a<30 && !s.preg){
+      if(s.clin==="low") v.push(rec(`&lt;30 лет, низкий риск: <b>наблюдение 1–2 цикла</b>; исчезло → наблюдение; сохраняется → <b>УЗИ</b>`,"X","Пальпируемое образование моложе 30 лет → Клинический риск ЗНО низкий → Наблюдение в динамике (1-2 менструальных цикла) → Образование сохраняется → УЗИ.",SRC_D+", Прил. Б-1"));
+      else v.push(rec(`&lt;30 лет, высокий клинический риск: <b>сразу УЗИ</b>`,"X","Клинический риск ЗНО высокий → УЗИ.",SRC_D+", Прил. Б-1"));
+      v.push(rec(`Узловое образование → ММГ показана <b>независимо от возраста</b> (по NCCN у &lt;30 — при отрицательном УЗИ)`,"B1","Рекомендована ММГ при наличии узловых образований в молочных железах независимо от возраста для верификации диагноза.",SRC_D+", разд. 2.4"));
+    } else if(!s.preg){
+      v.push(rec(`≥30 лет: <b>ММГ</b> → BI-RADS 1–3 → <b>УЗИ</b>; BI-RADS 4–5 → <b>биопсия</b>`,"B1","Пальпируемое образование старше 30 лет → Маммография → BI-RADS 1-3 → УЗИ; BI-RADS 4-5 → Биопсия образования. / Рекомендована ММГ при наличии узловых образований… независимо от возраста.",SRC_D+", Прил. Б-2; разд. 2.4"));
+    }
+    v.push(rec(`Подозрительно на ЗНО клинически, но УЗИ/ММГ без признаков → <b>МРТ МЖ с контрастированием</b>`,"C5","При наличии пальпируемых новообразований молочной железы, подозрительных на ЗНО, но без признаков злокачественного процесса по результатам УЗИ или ММГ для дифференциальной диагностики рекомендовано выполнение МРТ молочной железы с контрастированием.",SRC_D+", разд. 2.5"));
+    v.push(rec(`Кистозные и узловые изменения → <b>онколог</b> для верификации`,"X","Женщины с выявленными комплексными кистозными и узловыми изменениями молочных желез направляются к врачу-онкологу для верификации диагноза.",SRC_D+", разд. 2.5"));
+  }
+  if(s.sit==="dis"){
+    if(s.dis==="path"){
+      v.push(rec(`Патологические выделения: ${a<30?"<b>УЗИ ± ММГ</b>":"<b>УЗИ + ММГ</b>"}; дополнительно <b>МРТ / дуктография</b> → BI-RADS 1–3 — удаление протока, 4–5 — биопсия`,"X","Выделения: постоянные, спонтанные, односторонние, из одного протока, серозные, геморрагические… → Моложе 30: УЗИ ± маммография; Старше 30: УЗИ и маммография → Дополнительно: МРТ/Дуктография…",SRC_D+", Прил. Б-3"));
+      v.push(rec(`<b>Цитология отделяемого + дуктография</b> (выполняет онколог)`,"B2","Рекомендовано цитологическое исследование отделяемого из соска молочной железы, проведение дуктографии для определения причины секреции и топической диагностики у пациенток с самопроизвольными выделениями из соска серозного, серозно-геморрагического или геморрагического характера.",SRC_D+", разд. 2.5"));
+      v.push(rec(`Радиальная протоковая сонография при подозрении на внутрипротоковое образование`,"C5","Рекомендовано полипозиционное и полипроекционное ультразвуковое исследование протокового дерева (радиальная протоковая сонография)… при подозрении на внутрипротоковое образование.",SRC_D+", разд. 2.5"));
+      v.push(rec(`Внутрипротоковая папиллома → <b>резекция МЖ</b> (онколог)`,"C4","Рекомендована резекция молочной железы пациентам с внутрипротоковой папилломой с целью ее полного удаления…",SRC_D+", разд. 3.3"));
+    } else {
+      v.push(rec(a<40?`Физиологические выделения, &lt;40 лет → <b>наблюдение</b>`:`Физиологические выделения, ≥40 лет → <b>диагностическая ММГ и/или УЗИ</b>`,"X","Выделения: не спонтанные, из многих протоков, НЕ серозные, НЕ геморрагические… → Моложе 40: наблюдение; Старше 40: диагностическая маммография и/или УЗИ.",SRC_D+", Прил. Б-3"));
+      v.push(rec(`Скудные прозрачные выделения — вариант нормы`,"X","Наличие скудных прозрачных выделений из сосков является проявлением физиологической нормы.",SRC_D+", разд. 2.2"));
+    }
+    if(s.gal){
+      v.push(rec(`Галакторея: <b>ХГЧ в крови, пролактин</b>, исключить препараты (антидепрессанты, домперидон, метоклопрамид, метилдопа, верапамил, КОК)`,"C5","Рекомендовано с целью дифференциальной диагностики при галакторее выполнение теста на беременность (исследование уровня хорионического гонадотропина в крови), исследование уровня пролактина в крови и исключение приема препаратов…",SRC_D+", разд. 2.3"));
+      v.push(rec(`Молозивоподобные BI-RADS 1–3 без внутрипротоковых изменений по цитологии → <b>МРТ и дуктография НЕ нужны</b>`,"B3","Не рекомендовано выполнение МРТ молочной железы и дуктографии при отсутствии данных за внутрипротоковые изменения по результатам цитологического исследования отделяемого… пациенткам с молозивоподобными выделениями из соска, относящимся к категории BI-RADS1-3.",SRC_D+", разд. 2.5"));
+    }
+    if(s.hprl) v.push(rec(`Гиперпролактинемия → <b>МРТ головного мозга</b> (аденома гипофиза)`,"C4","При гиперпролактинемии рекомендуется проведение МРТ головного мозга для исключения аденомы гипофиза.",SRC_D+", разд. 2.4"));
+  }
+  if(s.sit==="pain"){
+    v.push(rec(a<40||s.preg?`Визуализация: <b>УЗИ МЖ</b>`:`Визуализация: <b>ММГ</b> (+ УЗИ при развитой железистой ткани)`,a<40?"B2":"C5","Рекомендованы для диагностики ДДМЖ маммография… в качестве скринингового метода от 40 до 75 лет; ультразвуковое исследование молочных желез (УЗИ) у пациенток молодого возраста (до 40 лет)…",SRC_D+", разд. 2.4"));
+    v.push(rec(`Лечение масталгии → вкладка «Масталгия»`,"",""));
+  }
+  v.push(rec(`МРТ с контрастом на первом этапе диагностики ДДМЖ — <b>не рекомендовано</b>`,"C5","Выполнение МРТ молочной железы с контрастированием на первом этапе диагностики ДДМЖ не рекомендовано.",SRC_D+", разд. 2.4"));
+  H+=sec("Визуализация","info",v);
+
+  // BI-RADS
+  if(s.br!=="none"){
+    const b=s.br; let txt, tone, who, q;
+    q="При результатах BI-RADS 1, 2 пациентка находится под наблюдением врача-акушера-гинеколога, при остальных категориях BI-RADS (0, 3, 4 и 5) – необходим прием (осмотр, консультация) врача-онколога первичный для исключения или верификации диагноза… Пациенты с признаками BI-RADS 6 проходят лечение и наблюдаются врачом-онкологом.";
+    if(b==="1"||b==="2"){ tone="ok"; who=`<span class="pill p-ag">Ведёт акушер-гинеколог</span>`; txt="Рутинный скрининг, диспансерное наблюдение у АГ"; }
+    else if(b==="0"){ tone="amb"; who=`<span class="pill p-onc">Консультация онколога</span>`; txt="Неполное исследование: доп. проекции / сравнение с предыдущими / УЗИ"; }
+    else if(b==="3"){ tone="amb"; who=`<span class="pill p-onc">Консультация онколога</span>`; txt="Вероятно доброкачественное (≤2%): <b>физикальный осмотр + ММГ и УЗИ каждые 6 мес 1–2 года</b>; отрицательная динамика → онколог повторно"; }
+    else if(b==="4"||b==="5"){ tone="red"; who=`<span class="pill p-onc">Онколог</span>`; txt="<b>Морфологическая верификация</b>: ПТАБ — жидкостные, трепан-биопсия — солидные (выполняет онколог)"; }
+    else { tone="red"; who=`<span class="pill p-onc">Онколог</span>`; txt="Морфологически подтверждённый РМЖ — лечение и наблюдение у онколога"; }
+    const items=[rec(`${who} BI-RADS ${b}: ${txt}`,"C5",q,SRC_D+", разд. 2.4")];
+    if(b==="3") items.push(rec(`Солидное BI-RADS 3 — динамическое наблюдение 1 раз в 6 мес 1–2 года`,"C5","Рекомендовано динамическое наблюдение при солидном образовании категории BI-RADS3… Динамическое наблюдение подразумевает физикальный осмотр с ММГ и УЗИ 1 раз в 6 мес. в течение 1-2 лет.",SRC_D+", разд. 2.5"));
+    if(b==="4"||b==="5") items.push(rec(`Трепан-биопсия солидного образования BI-RADS 4–5 + патанатомия (± ИГХ)`,"C5","Рекомендована трепан-биопсия новообразования молочной железы… во всех случаях, когда имеются признаки или подозрения на наличие ЗНО (BI-RADS4-5) (выполняется врачом-онкологом)…",SRC_D+", разд. 2.5"));
+    H+=sec("Маршрут по BI-RADS",tone,items);
+  }
+  // плотность
+  if(s.dens==="C"||s.dens==="D"){
+    H+=sec(`Плотность ACR ${s.dens}`,"amb",[
+      rec(`Доп. визуализация: <b>УЗИ / МРТ с КУ / томосинтез</b> (чувствительность ММГ падает до 48%)`,"B1","Рекомендовано при повышенной маммографической плотности С и D проведение дополнительных методов визуализации диагностики (УЗИ молочных желез, МРТ молочной железы с контрастированием или томосинтез молочных желез)…",SRC_D+", разд. 2.4"),
+      rec(`Скрининговый интервал — <b>1 год</b>`,"C5","При маммографической плотности С и D целесообразен более короткий скрининговый интервал (1 год) и дополнительный метод визуализации…",SRC_D+", разд. 5.3")
+    ]);
+  }
+  // кисты
+  const cy={
+    simple:[rec(`Простая киста (BI-RADS 2): <b>контроль УЗИ через 6 мес</b>`,"C5","Рекомендовано динамическое наблюдение с контролем через 6 мес. при наличии простых кист по результатам УЗИ (BI-RADS2)…",SRC_D+", разд. 2.5")],
+    tense:[rec(`Напряжённая болезненная киста → <b>онколог</b>: решение о ТАБ под УЗИ`,"C5","…при напряженных кистах, сопровождающихся болевыми ощущениями, необходим прием (осмотр, консультация) врача-онколога для решения вопроса о тонкоигольной аспирационной биопсии (ТАБ) под ультразвуковым контролем…",SRC_D+", разд. 2.5")],
+    compl:[rec(`Осложнённая киста: <b>осмотр + УЗИ каждые 6 мес</b> (без жалоб); ТАБ с цитологией — по показаниям; ММГ при УЗИ BI-RADS 3`,"C4","Рекомендовано при осложненных кистах динамическое наблюдение в интервале 1 раз в 6 мес. при отсутствии жалоб… по показаниям выполняется пункционная аспирационная биопсия (ТАБ) под УЗ контролем… при необходимости проводится маммография при УЗИ признаках BI-RADS3.",SRC_D+", разд. 2.5")],
+    complex:[rec(`Комплексная киста (BI-RADS 4–5): <b>трепан-биопсия солидного компонента</b> (онколог)`,"C5","Рекомендуется выполнение трепан-биопсии… солидного компонента кисты при наличии комплексных (атипичных, сложных) кист по результатам УЗИ категорий BI-RADS4-5…",SRC_D+", разд. 2.5"),
+      rec(`Хирургия кисты — пристеночные разрастания, атипия/пролиферация в цитологии, геморрагическое содержимое`,"C3","Рекомендовано проведение хирургического лечения кист молочных желез при наличии пристеночных разрастаний, выраженной пролиферации эпителия выстилки кисты и атипии клеток… геморрагическом содержимом кисты.",SRC_D+", разд. 3.3")]
+  };
+  if(s.cyst!=="none") H+=sec("Киста",s.cyst==="complex"||s.cyst==="tense"?"red":"amb",cy[s.cyst]);
+
+  // гормоны
+  H+=sec("Контрацепция и МГТ при ДДМЖ","plain",[
+    rec(`ДДМЖ — <b>категория 1</b> для КОК (без ограничений)`,"C5","Рекомендовано классифицировать ДДМЖ как категорию 1 в соответствии с Национальными критериями приемлемости методов контрацепции (2023 г.)…",SRC_D+", разд. 3.3"),
+    rec(`Неуточнённое образование МЖ — <b>категория 2</b> для КОК, с обязательным дообследованием`,"C5","Рекомендовано рассматривать неуточненные образования в молочной железе как категория 2… для всех типов КОК…, с обязательным дообследованием и уточнением диагноза.",SRC_D+", разд. 3.3"),
+    rec(`ДДМЖ — <b>не противопоказание к МГТ</b>; РМЖ — абсолютное. Меньше риск: дидрогестерон, дроспиренон, микронизированный прогестерон в составе`,"X","ДДМЖ не является противопоказанием для назначения МГТ… Установленный диагноз РМЖ является абсолютным противопоказанием как для назначения, так и для продолжения МГТ.",SRC_D+", разд. 3.4")
+  ]);
+  H+=sec("Кто ведёт","plain",[rec(`АГ: оценка риска, раннее выявление, лечение <b>диффузных</b> форм, диспансеризация после исключения ЗНО. Онколог: инвазивная диагностика, хирургия, химиопрофилактика`,"X","При выявлении доброкачественных заболеваний молочных желез женщины находятся под диспансерным наблюдением врача-акушера-гинеколога… Инвазивные методы диагностики выполняются врачом-онкологом.",SRC_D+", разд. 6.1")]);
+  document.getElementById("dd-out").innerHTML=H;
+}
+bindForm(document.getElementById("dd-form"), DS, renderDD);
+renderDD();
+
+/* =========================================================
+   МАСТАЛГИЯ (КР 598)
+   ========================================================= */
+const PS0=()=>({type:"cyc", form:"diff", vas:5, hprl:false, preg:false, gv:false, minor:false, hirisk:false, fail1:false, thromb:false, cvd:false});
+const PS=PS0();
+function vasTxt(v){ return v<2?"слабая":v<4?"умеренная":v<6?"сильная":v<8?"сильнейшая":"невыносимая"; }
+function renderPain(){
+  const f=document.getElementById("pain-form");
+  let h=`<div class="lbl">Тип боли</div>`+seg("type",[["cyc","Циклическая"],["noncyc","Нециклическая"],["extra","Экстрамаммарная"]],PS);
+  h+=`<div class="lbl">Форма ДДМЖ по обследованию</div>`+seg("form",[["diff","Диффузная"],["nod","Узловая"],["none","Не обследована"]],PS);
+  h+=`<div class="lbl">ВАШ: <span id="vas-v">${PS.vas}</span> см — <span id="vas-t">${vasTxt(PS.vas)}</span></div><input type="range" min="0" max="10" step="1" data-n="vas" value="${PS.vas}">`;
+  h+=`<div class="lbl">Ограничения</div><div class="chk">`+chk("preg","Беременность",PS)+chk("gv","Грудное вскармливание",PS)+chk("minor","&lt;18 лет",PS)+
+    chk("hprl","Гиперпролактинемия",PS)+chk("hirisk","Высокий риск РМЖ",PS)+chk("fail1","1-я линия неэффективна",PS)+
+    chk("thromb","ВТЭ/тромбофлебит в анамнезе",PS)+chk("cvd","Тяжёлые ССЗ / АГ / психозы",PS)+`</div>`;
+  f.innerHTML=h;
+  painOut();
+}
+renderOutOnly=()=>{ const t=document.getElementById("vas-t"); if(t) t.textContent=vasTxt(PS.vas); if(curTab==="pain") painOut(); };
+
+function drug(name, dose, g, q, blocks){
+  const why = blocks.filter(b=>b[0]).map(b=>b[1]);
+  const off = why.length>0;
+  return rec(`<b>${name}</b> — <span class="dose">${dose}</span>${off?`<br><span class="warn">✕ Нельзя: ${why.join("; ")}</span>`:""}`, g, q, SRC_D+", разд. 3.2, Прил. А3", off);
+}
+function painOut(){
+  const s=PS; let H="";
+  const pre=[];
+  if(s.form!=="diff"){
+    pre.push(rec(`<b>АГ назначает терапию только при диффузных формах ДДМЖ.</b> ${s.form==="nod"?"Узловая форма → онколог для верификации.":"Сначала обследование (УЗИ/ММГ по возрасту, BI-RADS)."}`,"X",
+      "Врач-акушер-гинеколог назначает терапию только пациенткам с диффузными формами ДДМЖ.",SRC_D+", разд. 3.2"));
+  }
+  if(s.type==="noncyc") pre.push(rec(`Нециклическая (чаще односторонняя, локальная) → искать причину: <b>мастит, травма, болезнь Мондора, кисты, опухоли</b>; визуализация`,"X",
+      "Причинами нециклической масталгии являются мастит, травма, тромбофлебит (болезнь Мондора), кисты и опухоли.",SRC_D+", разд. 1.6"));
+  if(s.type==="extra") pre.push(rec(`Экстрамаммарная: синдром Титце, травма грудной клетки, радикулопатия, опоясывающий лишай; лекарства (гормоны, антидепрессанты, антигипертензивные, кардиологические). НПВП локально бывают эффективны`,"X",
+      "Экстрамаммарная масталгия встречается при реберно-хрящевом синдроме (синдром Титце), травме грудной клетки, шейной и грудной радикулопатии, опоясывающем лишае.",SRC_D+", разд. 1.6"));
+  pre.push(rec(`ВАШ ${s.vas} см — <b>${vasTxt(s.vas)}</b> боль. Невыраженная и непродолжительная масталгия без физикальных изменений не повышает риск РМЖ`,"X",
+      "Женщины с невыраженной и непродолжительной масталгией и отсутствием физикальных изменений молочных желез имеют тот же риск РМЖ (1,2%-6,7%), что и женщины без масталгии.",SRC_D+", разд. 1.6"));
+  H+=sec("Сначала", s.form!=="diff"?"red":"info", pre);
+
+  H+=sec("Немедикаментозно","ok",[
+    rec(`Заверение + <b>психологическая коррекция, релаксирующий тренинг</b> (заверение купирует боль у 86% при средней интенсивности)`,"C5","Рекомендована психологическая коррекция и релаксирующий тренинг для пациенток с масталгией… Только наблюдение и заверение пациентки в отсутствии угрозы ее здоровью помогают купировать болевой синдром у 86% женщин со средней интенсивностью боли…",SRC_D+", разд. 3.1"),
+    rec(`<b>Поддерживающий бюстгальтер</b> (спортивный — эффективнее)`,"C4","Рекомендован подбор комфортного бюстгальтера, эффективно поддерживающего молочную железу… Спортивный бюстгальтер наиболее эффективно поддерживает молочную железу…",SRC_D+", разд. 3.1"),
+    rec(`<b>Ограничить метилксантины</b> (кофе, чай, шоколад, какао, кола) — у 61% уменьшение боли`,"C5","Рекомендовано всем женщинам ограничение продуктов, содержащих метилксантины (кофе, чай, шоколад, какао, кола) или полный отказ от них у пациенток с масталгией…",SRC_D+", разд. 3.1"),
+    rec(`Диета с <b>низким содержанием животных жиров, богатая клетчаткой</b>`,"B3","Рекомендовано взрослым пациенткам с масталгией употребление пищи с низким содержанием животных жиров и богатой клетчаткой…",SRC_D+", разд. 3.1")
+  ]);
+
+  if(s.form!=="diff"){ document.getElementById("pain-out").innerHTML=H; return; }
+  const nod=s.form==="nod";
+  const L1=[
+    drug("Прогестерон гель 1% наружно","2,5 г (25 мг) на кожу МЖ 1–2 р/сут ежедневно или с 16 по 25 день цикла, до 3 циклов","C5",
+      "Рекомендовано использование препаратов на основе микронизированного прогестерона (по АТХ - Гестагены) пациенткам с ДДМЖ для купирования циклической масталгии.",
+      [[nod,"узловая форма"],[s.preg,"II–III триместр беременности (по инструкции)"]]),
+    drug("Прогестерон микронизированный** внутрь","200–400 мг/сут 10 дней (обычно 17–26 день цикла)","C5",
+      "Рекомендовано использование препаратов на основе микронизированного прогестерона (по АТХ - Гестагены) пациенткам с ДДМЖ для купирования циклической масталгии.",
+      [[s.thromb,"ВТЭ/тромбофлебит в анамнезе"]]),
+    drug("Прутняка обыкновенного плодов экстракт","1 таб. или 40 кап. 1 р/сут ≥3 мес","B2",
+      "Рекомендовано использование Прутняка обыкновенного плодов экстракт или мастодинона (МНН отсутствует) в комплексной терапии взрослых пациенток с ДДМЖ для купирования циклической масталгии.",
+      [[s.preg,"беременность"],[s.gv,"ГВ"],[s.minor,"<18 лет"]]),
+    drug("Мастодинон","1 таб. или 30 кап. 2 р/сут ≥3 мес","B2",
+      "Рекомендовано использование Прутняка обыкновенного плодов экстракт или мастодинона (МНН отсутствует) в комплексной терапии взрослых пациенток с ДДМЖ для купирования циклической масталгии.",
+      [[s.preg,"беременность"],[s.gv,"ГВ"]]),
+    drug("Индолкарбинол","200 мг 2 р/сут перед едой 6 мес","B2",
+      "Рекомендованы препараты на основе индолкарбинола взрослым женщинам для лечения циклической масталгии при ДДМЖ.",
+      [[s.preg,"беременность"],[s.gv,"ГВ"],[s.minor,"<18 лет"]]),
+    drug("НПВП локально","коротко — при выраженной масталгии (ЖКТ-риски при длительном)","C5",
+      "Рекомендовано применение локальных нестероидных противовоспалительных и противоревматических препаратов (НПВП) пациенткам с выраженной масталгией с целью купирования болевого синдрома.",
+      [])
+  ];
+  if(s.type!=="cyc") L1.unshift(rec(`Прогестерон, витекс, индолкарбинол в КР — для <b>циклической</b> масталгии`,"X","…для купирования циклической масталгии.",SRC_D+", разд. 3.2"));
+  H+=sec("Первая линия","amb",L1);
+
+  const L2=[
+    drug("Бромокриптин**", "1,25–2,5 мг 2–3 р/сут → постепенно до 5–20 мг/сут, 3–6 мес","B1",
+      "Рекомендовано применение агонистов дофаминовых рецепторов с целью лечения масталгии и нормализации уровня пролактина.",
+      [[s.cvd,"тяжёлые ССЗ / АГ / эндогенные психозы"],[s.preg,"токсикоз беременности/беременность"]]),
+    drug("#Тамоксифен**","10 мг/сут внутрь 3–6 мес — вторая линия или высокий риск РМЖ","B1",
+      "Рекомендовано применение антиэстрогенов (#Тамоксифен** по 10 мг/сут. внутрь в течение 3-6 мес.) для купирования масталгии у взрослых пациенток с ДДМЖ в качестве второй линии терапии или при высоком риске РМЖ.",
+      [[s.preg,"беременность"],[s.gv,"ГВ"],[s.minor,"<18 лет"],[!s.fail1&&!s.hirisk,"только 2-я линия (нет неэффективности 1-й) или высокий риск"]])
+  ];
+  H+=sec(s.hprl?"При гиперпролактинемии / вторая линия":"Вторая линия", s.hprl||s.fail1||s.hirisk?"red":"plain", L2);
+  H+=sec("Не делать","plain",[rec(`БАДы при ДДМЖ — <b>не рекомендуются</b>`,"X","Примечание: Использование БАДов при лечении ДДМЖ не рекомендуется.",SRC_D+", Прил. А3")]);
+  document.getElementById("pain-out").innerHTML=H;
+}
+bindForm(document.getElementById("pain-form"), PS, renderPain);
+renderPain();
+
+/* =========================================================
+   BI-RADS справочник
+   ========================================================= */
+(function(){
+  const cats=[
+    ["0","Неполное исследование","—","Доп. проекции / сравнение с предыдущими / УЗИ","p-onc","Онколог (консультация)"],
+    ["1","Норма","≈0%","Рутинный скрининг","p-ag","Акушер-гинеколог"],
+    ["2","Доброкачественные изменения","≈0%","Рутинный скрининг; простая киста — контроль через 6 мес","p-ag","Акушер-гинеколог"],
+    ["3","Вероятно доброкачественные","&gt;0 – ≤2%","Осмотр + ММГ/УЗИ через 6 мес, 1–2 года","p-onc","Онколог (консультация)"],
+    ["4","Подозрение на ЗНО: 4A 2–10% · 4B 10–50% · 4C 50–95%","2–95%","Морфология: ПТАБ (жидкостные), трепан-биопсия (солидные)","p-onc","Онколог"],
+    ["5","Высокая вероятность ЗНО","&gt;95%","Трепан-биопсия","p-onc","Онколог"],
+    ["6","РМЖ подтверждён морфологически","—","Лечение","p-onc","Онколог"]
+  ];
+  let h=`<div class="card"><h2>Категории BI-RADS и маршрут</h2><p class="note">Категория едина для ММГ, УЗИ и МРТ; указывается отдельно для каждой МЖ. Источник: ${SRC_D}, разд. 2.4, Прил. Г1 (ACR BI-RADS 5th ed.).</p>`;
+  cats.forEach(c=>{ h+=`<div class="bir"><div class="n c${c[0]}">${c[0]}</div><div class="t"><b>${c[1]}</b> · риск ЗНО ${c[2]}<br>${c[3]}<br><span class="pill ${c[4]}">${c[5]}</span></div></div>`; });
+  h+=`</div>`;
+  h+=`<div class="card"><h2>Тактика по методу (Прил. Г1, табл. 4)</h2><div class="tblwrap"><table><tr><th>Кат.</th><th>ММГ</th><th>УЗИ</th><th>МРТ</th></tr>
+  <tr><td>0</td><td>Повторный вызов, доп. исследование, сравнение с предыдущими</td><td>Повторный вызов для доп. исследования</td><td>Доп.: ММГ или прицельное УЗИ</td></tr>
+  <tr><td>1–2</td><td>Рутинный скрининг</td><td>Рутинный скрининг</td><td>Рутинный, если пожизненный риск РМЖ ≥20%</td></tr>
+  <tr><td>3</td><td>Контроль через 6 мес</td><td>Контроль через 3–6 мес</td><td>6 мес — по показаниям</td></tr>
+  <tr><td>4–5</td><td colspan="3">Биопсия; ММГ, УЗИ, возможно МРТ с КУ для распространённости</td></tr>
+  <tr><td>6</td><td colspan="3">Хирургическое лечение, если клинически оправдано</td></tr></table></div></div>`;
+  h+=`<div class="card"><h2>Плотность по ACR</h2><div class="tblwrap"><table><tr><th>ACR</th><th>Фиброзно-железистый компонент</th><th>Wolfe</th></tr>
+  <tr><td>A</td><td>&lt;25% — нерезко выраженная</td><td>N1</td></tr><tr><td>B</td><td>25–50% — средней степени</td><td>P1</td></tr>
+  <tr><td>C</td><td>50–75% — выраженная</td><td>P2</td></tr><tr><td>D</td><td>&gt;75% — резко выраженная</td><td>DY</td></tr></table></div>
+  <p class="note"><b>C и D</b>: чувствительность ММГ падает до 48% → УЗИ / МРТ с КУ / томосинтез (УУР B, УДД 1), интервал скрининга 1 год.</p></div>`;
+  h+=`<div class="card"><h2>Кисты на УЗИ (КР ID 598)</h2><div class="tblwrap"><table><tr><th>Тип</th><th>Признаки</th><th>Тактика</th></tr>
+  <tr><td><b>Простая</b> (BI-RADS 2)</td><td>Анэхогенная, округлая/овальная, чёткие ровные контуры, однородная, капсула, дорсальное псевдоусиление, аваскулярная в ЦДК</td><td>Контроль через 6 мес; напряжённая болезненная → онколог (ТАБ)</td></tr>
+  <tr><td><b>Осложнённая</b></td><td>Как простая, но с гиперэхогенными включениями (взвесь, перегородки, тканевой компонент) <b>без васкуляризации</b></td><td>Осмотр + УЗИ 1 раз в 6 мес; ТАБ по показаниям; ММГ при BI-RADS 3</td></tr>
+  <tr><td><b>Комплексная</b> (BI-RADS 4–5)</td><td>Анэхогенный + гиперэхогенный компонент: толстые стенки/перегородки, пристеночные разрастания <b>с васкуляризацией</b></td><td>Трепан-биопсия солидного компонента (онколог)</td></tr></table></div></div>`;
+  h+=`<div class="card"><h2>Подозрительно на РМЖ</h2>
+  <p><b>ММГ:</b> объёмное/узловое образование, нарушение архитектоники (в т.ч. радиальный рубец), сгруппированные микрокальцинаты, локальная асимметрия, изменения соска и кожи.</p>
+  <p><b>Микрокальцинаты подозрительные:</b> протоковые сегментарного и линейного распределения, ацинарные сгруппированные, с нарушением архитектоники.</p>
+  <div class="tblwrap"><table><tr><th>Признак</th><th>ДДМЖ</th><th>ЗНО</th></tr>
+  <tr><td>Консистенция</td><td>Плотная/эластичная</td><td>Твёрдая</td></tr><tr><td>Болезненность</td><td>Часто</td><td>Нет (90%)</td></tr>
+  <tr><td>Края</td><td>Ровные, гладкие</td><td>Неровные</td></tr><tr><td>Подвижность</td><td>Смещаемое</td><td>Фиксировано к коже/стенке</td></tr>
+  <tr><td>«Лимонная корка»</td><td>Маловероятно</td><td>Высокая вероятность</td></tr><tr><td>Выделения</td><td>Двусторонние, без крови</td><td>Односторонние, с кровью</td></tr>
+  <tr><td>Втянутость соска</td><td>Нет</td><td>Может быть</td></tr></table></div></div>`;
+  h+=`<div class="card"><h2>Морфология → риск РМЖ</h2><div class="tblwrap"><table><tr><th>Форма</th><th>Изменения</th><th>ОР (95% ДИ)</th></tr>
+  <tr><td>Непролиферативные</td><td>Простые кисты, лёгкая гиперплазия, апокриновые изменения</td><td>1,17 (0,94–1,47)</td></tr>
+  <tr><td>Пролиферативные без атипии</td><td>Фиброаденома, внутрипротоковая папиллома, умеренная гиперплазия, склерозирующий аденоз, радиальный рубец</td><td>1,76 (1,58–1,95)</td></tr>
+  <tr><td>Атипическая гиперплазия</td><td>ADH, ALH</td><td>3,93 (3,24–4,76)</td></tr><tr><td>LCIS</td><td>—</td><td>6,9–11</td></tr></table></div>
+  <p class="note">ADH, FEA, ALH, LCIS, радиальный рубец с атипией по биопсии → <b>резекция МЖ</b> (онколог; УУР C, УДД 3).</p></div>`;
+  document.getElementById("bir-ref").innerHTML=h;
+})();
+
+/* =========================================================
+   ТРЕНАЖЁР BI-RADS — схемы находок (SVG)
+   ========================================================= */
+let uid=0;
+function usFrame(inner, opt={}){
+  const id="u"+(++uid);
+  return `<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" role="img">
+  <defs>
+    <filter id="${id}n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="${uid*7}"/><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.1 -0.35"/></filter>
+    <filter id="${id}b"><feGaussianBlur stdDeviation="1.2"/></filter>
+    <linearGradient id="${id}e" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".95"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient>
+  </defs>
+  <rect width="320" height="220" fill="#111"/>
+  <rect y="8" width="320" height="6" fill="#d8d8d8"/>
+  <rect y="14" width="320" height="34" fill="#3a3a3a"/>
+  <ellipse cx="60" cy="32" rx="38" ry="12" fill="#1c1c1c"/><ellipse cx="200" cy="34" rx="44" ry="11" fill="#1c1c1c"/>
+  <rect y="48" width="320" height="130" fill="#8a8a8a"/>
+  <rect y="178" width="320" height="42" fill="#444"/>
+  <path d="M0 186 H320 M0 196 H320 M0 206 H320" stroke="#888" stroke-width="2"/>
+  <rect width="320" height="220" filter="url(#${id}n)" opacity=".55"/>
+  ${inner(id)}
+  <text x="6" y="216" fill="#fff" font-size="10" font-family="system-ui">${opt.label||"УЗИ, линейный датчик"}</text>
+  </svg>`;
+}
+const US={
+  simpleCyst:()=>usFrame(id=>`<rect x="122" y="112" width="76" height="66" fill="url(#${id}e)"/>
+    <ellipse cx="160" cy="100" rx="40" ry="24" fill="#020202" stroke="#f2f2f2" stroke-width="2"/>`),
+  complCyst:()=>usFrame(id=>`<rect x="122" y="112" width="76" height="60" fill="url(#${id}e)" opacity=".7"/>
+    <ellipse cx="160" cy="100" rx="38" ry="23" fill="#2b2b2b" stroke="#d9d9d9" stroke-width="2"/>
+    ${Array.from({length:40},(_,i)=>`<circle cx="${132+((i*37)%56)}" cy="${86+((i*23)%28)}" r="1.4" fill="#9a9a9a"/>`).join("")}
+    <path d="M128 108 Q160 112 192 108" stroke="#777" stroke-width="2" fill="none"/>`),
+  complexCyst:()=>usFrame(id=>`<ellipse cx="160" cy="100" rx="42" ry="27" fill="#030303" stroke="#e6e6e6" stroke-width="5"/>
+    <path d="M150 74 Q165 100 150 126" stroke="#bbb" stroke-width="5" fill="none"/>
+    <path d="M176 76 q20 6 18 26 q-14 4 -22 -6 z" fill="#8c8c8c"/>
+    <circle cx="183" cy="88" r="3" fill="#e53935"/><circle cx="187" cy="96" r="2.5" fill="#1e88e5"/><circle cx="180" cy="95" r="2" fill="#e53935"/>
+    <text x="230" y="70" fill="#ff5252" font-size="10" font-family="system-ui">ЦДК</text>`,{label:"УЗИ + ЦДК"}),
+  oval:()=>usFrame(id=>`<ellipse cx="160" cy="98" rx="42" ry="20" fill="#3c3c3c" stroke="#5a5a5a" stroke-width="1.5"/>
+    <rect x="125" y="118" width="70" height="20" fill="url(#${id}e)" opacity=".4"/>`),
+  spic:()=>usFrame(id=>`<rect x="128" y="120" width="64" height="58" fill="url(#${id}s)"/>
+    <g stroke="#b5b5b5" stroke-width="2">${Array.from({length:14},(_,i)=>{const a=i/14*Math.PI*2;return `<line x1="${160+Math.cos(a)*22}" y1="${96+Math.sin(a)*26}" x2="${160+Math.cos(a)*44}" y2="${96+Math.sin(a)*46}"/>`;}).join("")}</g>
+    <path d="M160 64 L176 76 L184 92 L180 112 L170 124 L152 126 L140 112 L136 92 L144 74 Z" fill="#141414" stroke="#d0d0d0" stroke-width="5" stroke-opacity=".45"/>`),
+  node:()=>usFrame(id=>`<path d="M118 96 C118 74 200 70 202 94 C204 116 176 112 160 112 C140 112 118 118 118 96 Z" fill="#2c2c2c"/>
+    <path d="M140 94 C150 84 182 84 188 96 C176 100 160 100 140 94Z" fill="#d6d6d6"/>`),
+  duct:()=>usFrame(id=>`<path d="M40 90 Q120 84 200 96 Q250 104 300 98" stroke="#050505" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <ellipse cx="190" cy="94" rx="10" ry="6.5" fill="#7a7a7a"/><circle cx="186" cy="94" r="2.4" fill="#e53935"/><circle cx="194" cy="95" r="2" fill="#e53935"/>
+    <text x="10" y="80" fill="#fff" font-size="10" font-family="system-ui">сосок ←</text>`,{label:"УЗИ, радиальный срез + ЦДК"}),
+  lipoma:()=>usFrame(id=>`<ellipse cx="160" cy="70" rx="58" ry="18" fill="#5d5d5d" stroke="#9a9a9a" stroke-width="1.5"/>
+    <path d="M110 66 H210 M112 74 H208 M120 60 H200 M124 80 H196" stroke="#aaa" stroke-width="1.2"/>`,{label:"УЗИ, подкожная зона"})
+};
+function mgFrame(inner, opt={}){
+  const id="m"+(++uid); const dens=opt.dens||0.45;
+  return `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" role="img">
+  <defs>
+    <radialGradient id="${id}g" cx="0.15" cy="0.5" r="0.85"><stop offset="0" stop-color="#bdbdbd" stop-opacity="${dens}"/><stop offset=".7" stop-color="#8a8a8a" stop-opacity="${dens*0.7}"/><stop offset="1" stop-color="#555" stop-opacity="0.15"/></radialGradient>
+    <filter id="${id}n"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="${uid*3}"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 ${0.8*dens*2} -0.25"/></filter>
+    <clipPath id="${id}c"><path d="M0 8 C140 8 250 60 262 120 C250 180 140 232 0 232 Z"/></clipPath>
+    <filter id="${id}bl"><feGaussianBlur stdDeviation="${opt.blur||0}"/></filter>
+  </defs>
+  <rect width="320" height="240" fill="#000"/>
+  <g clip-path="url(#${id}c)" filter="url(#${id}bl)">
+    <path d="M0 8 C140 8 250 60 262 120 C250 180 140 232 0 232 Z" fill="#3a3a3a"/>
+    <rect width="320" height="240" fill="url(#${id}g)"/>
+    <rect width="320" height="240" filter="url(#${id}n)"/>
+    ${opt.trab===false?"":`<path d="M10 40 Q120 70 250 118 M10 200 Q120 170 250 122 M10 120 H250" stroke="#999" stroke-opacity=".25" stroke-width="2" fill="none"/>`}
+    ${inner(id)}
+  </g>
+  <path d="M0 8 C140 8 250 60 262 120 C250 180 140 232 0 232" stroke="#cfcfcf" stroke-width="1.5" fill="none"/>
+  <circle cx="262" cy="120" r="4" fill="#cfcfcf"/>
+  ${opt.cut?`<rect x="0" y="150" width="320" height="90" fill="#000"/><text x="8" y="170" fill="#ff8a80" font-size="11" font-family="system-ui">край снимка — ткань не вошла</text>`:""}
+  <text x="8" y="234" fill="#fff" font-size="10" font-family="system-ui">${opt.label||"ММГ, краниокаудальная проекция"}</text></svg>`;
+}
+const MG={
+  fatty:()=>mgFrame(()=>``,{dens:0.12}),
+  denseD:()=>mgFrame(()=>`<ellipse cx="110" cy="120" rx="110" ry="90" fill="#e0e0e0" opacity=".55"/>`,{dens:0.95}),
+  popcorn:()=>mgFrame(()=>`<ellipse cx="140" cy="110" rx="26" ry="20" fill="#9e9e9e" opacity=".8"/>
+    <path d="M128 104 q6 -8 12 0 q4 8 -6 9 z M146 112 q8 -6 10 4 q-6 8 -12 0 z M136 118 q4 -2 6 3 q-4 4 -7 0z" fill="#fff"/>`,{dens:0.2}),
+  fineLinear:()=>mgFrame(()=>`<g stroke="#fff" stroke-width="1.6" stroke-linecap="round">${
+    Array.from({length:26},(_,i)=>{const x=110+i*4.6+((i*13)%7), y=96+((i*29)%40)-i*0.3; const l=4+((i*7)%6); return `<line x1="${x}" y1="${y}" x2="${x+l}" y2="${y+((i%3)-1)*3}"/>`;}).join("")}
+    <path d="M180 110 l6 -4 M196 116 l5 3 M150 104 l3 -5" /></g>
+    <path d="M100 80 L250 116 L250 124 L100 150 Z" fill="none" stroke="#ffeb3b" stroke-dasharray="4 4" stroke-width="1.2"/>`,{dens:0.4}),
+  amorph:()=>mgFrame(()=>`<g fill="#f0f0f0" opacity=".85">${Array.from({length:18},(_,i)=>`<circle cx="${150+((i*17)%22)}" cy="${110+((i*11)%18)}" r="0.9"/>`).join("")}</g>
+    <circle cx="161" cy="119" r="18" fill="none" stroke="#ffeb3b" stroke-dasharray="3 3"/>`,{dens:0.4}),
+  distortion:()=>mgFrame(()=>`<g stroke="#e8e8e8" stroke-opacity=".75" stroke-width="1.4">${Array.from({length:16},(_,i)=>{const a=i/16*Math.PI*2;return `<line x1="150" y1="118" x2="${150+Math.cos(a)*(28+(i%3)*8)}" y2="${118+Math.sin(a)*(28+(i%3)*8)}"/>`;}).join("")}</g>`,{dens:0.35}),
+  spicMass:()=>mgFrame(()=>`<g stroke="#fff" stroke-width="1.6" stroke-opacity=".9">${Array.from({length:18},(_,i)=>{const a=i/18*Math.PI*2;return `<line x1="${150+Math.cos(a)*14}" y1="${118+Math.sin(a)*14}" x2="${150+Math.cos(a)*(34+(i%4)*7)}" y2="${118+Math.sin(a)*(34+(i%4)*7)}"/>`;}).join("")}</g>
+    <circle cx="150" cy="118" r="17" fill="#f5f5f5"/>
+    <path d="M196 64 Q230 92 236 116" stroke="#fff" stroke-width="2" fill="none" stroke-opacity=".7"/>`,{dens:0.3}),
+  oilCyst:()=>mgFrame(()=>`<circle cx="150" cy="116" r="22" fill="#151515" stroke="#fff" stroke-width="3.5"/>`,{dens:0.25}),
+  asymCut:()=>mgFrame(()=>`<ellipse cx="160" cy="80" rx="26" ry="18" fill="#ddd" opacity=".55"/>`,{dens:0.4,cut:true,label:"ММГ, MLO — укладка с ошибкой"}),
+  clip:()=>mgFrame(()=>`<g stroke="#fff" stroke-width="1.4" stroke-opacity=".8">${Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2;return `<line x1="140" y1="120" x2="${140+Math.cos(a)*32}" y2="${120+Math.sin(a)*32}"/>`;}).join("")}</g>
+    <circle cx="140" cy="120" r="15" fill="#efefef"/><path d="M134 116 h10 v3 h-7 v6 h-3z" fill="#000"/><path d="M134 116 h10 v3 h-7 v6 h-3z" fill="none" stroke="#fff" stroke-width=".8"/>`,{dens:0.3,label:"ММГ, после трепан-биопсии (метка-клипса)"})
+};
+
+/* tactic keys */
+const TAC={
+  A:"Ведёт акушер-гинеколог: рутинный скрининг / плановое наблюдение",
+  B:"Консультация онколога + контроль (осмотр, УЗИ/ММГ) через 6 мес",
+  C:"Морфологическая верификация у онколога (ПТАБ / трепан-биопсия)",
+  D:"Дополнительная визуализация / сравнение с предыдущими снимками",
+  E:"Лечение у онколога"
+};
+const CASES=[
+ {m:"us",img:US.simpleCyst,age:34,txt:"Плановое УЗИ. В ВНК левой МЖ — анэхогенное образование 12×7 мм, овальное, чёткие ровные контуры, тонкая капсула, однородное, дорсальное псевдоусиление, аваскулярно в ЦДК. Жалоб нет.",cat:["2"],tac:"A",
+  ex:"Все признаки <b>простой кисты</b> → BI-RADS 2. По КР ID 598 — динамическое наблюдение с контролем через 6 мес (УУР C, УДД 5); ведёт АГ. Если киста напряжённая и болезненная → онколог для решения о ТАБ."},
+ {m:"us",img:US.oval,age:26,txt:"Пальпируемое образование 3 мес. УЗИ: гипоэхогенное, овальное, ориентация параллельно коже («шире, чем выше»), контуры чёткие, однородное, 14×7 мм, без кальцинатов; впервые выявлено.",cat:["3"],tac:"B",
+  ex:"Типичное «вероятно доброкачественное» солидное образование (вероятно фиброаденома) без предыдущих снимков → <b>BI-RADS 3</b>. КР: консультация онколога, далее осмотр + ММГ/УЗИ 1 раз в 6 мес 1–2 года (УУР C, УДД 5). Рост/изменение формы → повторно к онкологу."},
+ {m:"us",img:US.spic,age:58,txt:"Плотный безболезненный узел. УЗИ: гипоэхогенное образование неправильной формы, «выше, чем шире», спикулообразные контуры, гиперэхогенный ободок, выраженная дорсальная акустическая тень.",cat:["5"],tac:"C",
+  ex:"Набор признаков ЗНО (неправильная форма, спикулы, непараллельная ориентация, тень) → <b>BI-RADS 5</b> (&gt;95%). Трепан-биопсия у онколога (КР ID 598, разд. 2.5, УУР C, УДД 5)."},
+ {m:"us",img:US.complCyst,age:44,txt:"УЗИ: овальное образование 15 мм, ровные контуры, содержимое с мелкодисперсной взвесью (внутренние эхо), без солидного компонента, без кровотока в ЦДК. Жалоб нет.",cat:["3"],tac:"B",
+  ex:"<b>Осложнённая киста</b> — как простая, но с гиперэхогенными включениями без васкуляризации. Обычно BI-RADS 3. КР: осмотр + УЗИ 1 раз в 6 мес при отсутствии жалоб, ТАБ — по показаниям, ММГ при BI-RADS 3 (УУР C, УДД 4); по маршруту BI-RADS 3 — консультация онколога."},
+ {m:"us",img:US.complexCyst,age:51,txt:"УЗИ: кистозное образование 24 мм с утолщённой стенкой, перегородкой и пристеночным солидным разрастанием 9 мм; в разрастании — кровоток при ЦДК.",cat:["4"],tac:"C",
+  ex:"<b>Комплексная киста</b>: жидкостной + солидный компонент с васкуляризацией → BI-RADS 4. КР: трепан-биопсия солидного компонента у онколога (УУР C, УДД 5); при пристеночных разрастаниях, атипии, геморрагическом содержимом — хирургия."},
+ {m:"us",img:US.node,age:38,txt:"УЗИ: в аксиллярном отростке ВНК — бобовидное образование 8 мм с тонким гипоэхогенным корковым слоем и гиперэхогенными воротами; кровоток в воротах.",cat:["2"],tac:"A",
+  ex:"Типичный <b>внутримаммарный лимфоузел</b> (тонкая кора, жировые ворота) → BI-RADS 2, рутинное наблюдение у АГ."},
+ {m:"us",img:US.duct,age:47,txt:"Спонтанные кровянистые выделения из одного протока справа. Радиальная протоковая сонография: проток расширен до 4 мм, внутри — солидное включение 6 мм с кровотоком.",cat:["4"],tac:"C",
+  ex:"Внутрипротоковое солидное образование при патологических выделениях → <b>BI-RADS 4</b> (папиллома vs ЗНО). Цитология отделяемого, дуктография (УУР B, УДД 2), верификация у онколога; папиллома → резекция МЖ (УУР C, УДД 4)."},
+ {m:"us",img:US.lipoma,age:27,txt:"Мягкое подвижное образование под кожей. УЗИ: овальное, изоэхогенное подкожной клетчатке, тонкая капсула, параллельные эхогенные полоски внутри, сжимается датчиком, аваскулярное.",cat:["2"],tac:"A",
+  ex:"Классическая <b>липома</b> — доброкачественное образование с характерной картиной → BI-RADS 2. Наблюдение у АГ."},
+ {m:"mg",img:MG.fatty,age:62,txt:"Скрининговая ММГ в 2 проекциях: жировая инволюция, плотность ACR A, без образований, кальцинатов и нарушения архитектоники.",cat:["1"],tac:"A",
+  ex:"Норма → <b>BI-RADS 1</b>. В 40–75 лет — ММГ 1 раз в 2 года (УУР C, УДД 5), ведёт АГ."},
+ {m:"mg",img:MG.denseD,age:43,txt:"Скрининговая ММГ: плотность ACR D, образований и подозрительных кальцинатов не выявлено.",cat:["1"],tac:"D",
+  ex:"Категория — <b>BI-RADS 1</b>, но при плотности C/D чувствительность ММГ падает до 48%. КР ID 598: дополнительная визуализация — УЗИ, МРТ с КУ или томосинтез (УУР B, УДД 1) и интервал скрининга 1 год. Поэтому тактика — <b>доп. визуализация</b>."},
+ {m:"mg",img:MG.popcorn,age:66,txt:"ММГ: овальное образование с чёткими контурами, внутри — крупные грубые кальцинаты по типу «попкорна». Без динамики 3 года.",cat:["2"],tac:"A",
+  ex:"Крупные «попкорн»-кальцинаты — инволютивная <b>фиброаденома</b> → BI-RADS 2. Рутинное наблюдение."},
+ {m:"mg",img:MG.oilCyst,age:57,txt:"Травма МЖ год назад. ММГ: округлое образование жировой плотности (рентгенпрозрачный центр) с ободковым (скорлупообразным) кальцинатом по периферии.",cat:["2"],tac:"A",
+  ex:"<b>Масляная киста</b> (жировой некроз) — жировая плотность + ободковая кальцификация → BI-RADS 2."},
+ {m:"mg",img:MG.fineLinear,age:55,txt:"ММГ: тонкие линейные и ветвящиеся микрокальцинаты сегментарного распределения, направленные к соску (выделено пунктиром). Образования нет.",cat:["4","5"],tac:"C",
+  ex:"КР ID 598: подозрительны <b>протоковые кальцинаты сегментарного и линейного распределения</b>. Тонкие линейные ветвящиеся сегментарные → BI-RADS 4C–5. В любом случае — морфологическая верификация (вакуумная/стереотаксическая биопсия) у онколога."},
+ {m:"mg",img:MG.amorph,age:48,txt:"ММГ: новая группа мелких аморфных (нечётких) микрокальцинатов на участке до 1 см, сгруппированное распределение (выделено).",cat:["4"],tac:"C",
+  ex:"Сгруппированные аморфные кальцинаты — промежуточная подозрительность → <b>BI-RADS 4 (4B)</b>. КР: ацинарные сгруппированные микрокальцинаты подозрительны; верификация у онколога (стереотаксическая/вакуумная биопсия)."},
+ {m:"mg",img:MG.distortion,age:52,txt:"ММГ: нарушение архитектоники — радиально сходящиеся тяжи без центрального образования. Операций и травм МЖ в анамнезе нет.",cat:["4"],tac:"C",
+  ex:"<b>Нарушение архитектоники</b> без хирургического объяснения (в т.ч. радиальный рубец) — подозрительный признак по КР → BI-RADS 4, биопсия. Радиальный рубец с атипией → резекция."},
+ {m:"mg",img:MG.spicMass,age:60,txt:"ММГ: узел высокой плотности 20 мм со спикулами, утолщение и втяжение кожи над ним; клинически — фиксирован, «лимонная корка».",cat:["5"],tac:"C",
+  ex:"Спикулообразный узел + кожные изменения → <b>BI-RADS 5</b> (&gt;95%). Трепан-биопсия, ведёт онколог."},
+ {m:"mg",img:MG.asymCut,age:45,txt:"Первая скрининговая ММГ: в одной проекции — асимметрия плотности; укладка неполная (часть ткани не вошла), предыдущих снимков нет.",cat:["0"],tac:"D",
+  ex:"Исследование неполноценное, нужна доп. проекция/прицельный снимок/УЗИ или сравнение → <b>BI-RADS 0</b>. По маршруту КР — консультация онколога с определением тактики."},
+ {m:"mg",img:MG.clip,age:49,txt:"Контрольная ММГ после трепан-биопсии: гистология — инвазивная протоковая карцинома. В образовании метка-клипса.",cat:["6"],tac:"E",
+  ex:"Морфологически верифицированный РМЖ → <b>BI-RADS 6</b>. Лечение и наблюдение у онколога."}
+];
+
+const TR={order:[],i:0,ok:0,tot:0,stage:"cat",mode:"all",pickedCat:null,catOk:null};
+function trInit(){
+  const pool=CASES.map((c,i)=>i).filter(i=>TR.mode==="all"||CASES[i].m===TR.mode);
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  TR.order=pool;TR.i=0;TR.ok=0;TR.tot=0;TR.stage="cat";trRender();
+}
+function trRender(){
+  const el=document.getElementById("trainer");
+  if(TR.i>=TR.order.length){
+    el.innerHTML=`<div class="card"><h2>Итог</h2><p class="score" style="font-size:22px">${TR.ok} из ${TR.tot} верных ответов (категория + тактика)</p><button class="btn" id="tr-again">Ещё раз</button></div>`;
+    document.getElementById("tr-again").onclick=trInit; return;
+  }
+  const c=CASES[TR.order[TR.i]];
+  let h=`<div class="card"><div class="row" style="justify-content:space-between">
+    ${seg("mode",[["all","Все"],["us","УЗИ"],["mg","ММГ"]],TR)}
+    <span class="score">Кейс ${TR.i+1}/${TR.order.length} · ✓ ${TR.ok}</span></div></div>`;
+  h+=`<div class="card"><div class="case-img">${c.img()}</div>
+    <p style="margin:10px 0 0"><b>${c.age} лет.</b> ${c.txt}</p></div>`;
+  h+=`<div class="card"><div class="lbl">1. Категория BI-RADS</div><div class="opts" id="tr-cat">${["0","1","2","3","4","5","6"].map(x=>`<button data-v="${x}">${x}</button>`).join("")}</div>`;
+  if(TR.stage!=="cat"){
+    h+=`<div class="lbl" style="margin-top:14px">2. Тактика по КР</div><div class="topts" id="tr-tac">${Object.entries(TAC).map(([k,v])=>`<button data-v="${k}">${v}</button>`).join("")}</div>`;
+  }
+  h+=`<div id="tr-fb"></div></div>`;
+  el.innerHTML=h;
+  el.querySelector(".seg").onclick=e=>{const b=e.target.closest("button");if(!b)return;TR.mode=b.dataset.v;trInit();};
+  const catBox=document.getElementById("tr-cat");
+  if(TR.stage==="cat"){
+    catBox.onclick=e=>{const b=e.target.closest("button");if(!b)return;TR.pickedCat=b.dataset.v;TR.catOk=c.cat.includes(b.dataset.v);TR.stage="tac";trRender();};
+  } else {
+    catBox.querySelectorAll("button").forEach(b=>{b.disabled=true;if(c.cat.includes(b.dataset.v))b.classList.add("right");else if(b.dataset.v===TR.pickedCat)b.classList.add("wrong");});
+  }
+  if(TR.stage==="tac"){
+    document.getElementById("tr-tac").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+      const tacOk=b.dataset.v===c.tac; TR.tot++; if(TR.catOk&&tacOk)TR.ok++;
+      document.querySelectorAll("#tr-tac button").forEach(x=>{x.disabled=true;if(x.dataset.v===c.tac)x.classList.add("right");else if(x===b)x.classList.add("wrong");});
+      document.getElementById("tr-fb").innerHTML=`<div class="sec ${TR.catOk&&tacOk?"ok":"red"}" style="margin-top:14px"><h4>${TR.catOk&&tacOk?"Верно":"Разбор"}: BI-RADS ${c.cat.join(" / ")} → ${TAC[c.tac]}</h4><div class="rec"><div class="rt">${c.ex}</div></div></div>
+        <button class="btn" id="tr-next" style="width:100%">Следующий кейс →</button>`;
+      TR.stage="done";
+      document.getElementById("tr-next").onclick=()=>{TR.i++;TR.stage="cat";trRender();window.scrollTo({top:0});};
+    };
+  }
+}
+trInit();
+
+/* PWA */
+if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
+</script>
+</body>
+</html>
