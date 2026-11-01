@@ -118,6 +118,8 @@ footer{font-size:12.5px;color:var(--ink2);padding:6px 0 0}
     <button data-t="pain">Масталгия</button>
     <button data-t="birads">BI-RADS</button>
     <button data-t="train">Тренажёр BI-RADS</button>
+    <button data-t="lm">Учёба: Мастит</button>
+    <button data-t="ld">Учёба: ДДМЖ</button>
   </nav>
 </header>
 
@@ -145,6 +147,10 @@ footer{font-size:12.5px;color:var(--ink2);padding:6px 0 0}
 
 <!-- ================= ТРЕНАЖЁР ================= -->
 <section class="tab" id="t-train"><div id="trainer"></div></section>
+
+<!-- ================= УЧЁБА ================= -->
+<section class="tab" id="t-lm"><div id="learn-mast"></div></section>
+<section class="tab" id="t-ld"><div id="learn-dd"></div></section>
 
 <footer>Инструмент поддержки решений по тексту КР. Не заменяет клиническое мышление и инструкции к препаратам. «#» — применение вне инструкции (off-label), как в КР.</footer>
 </main>
@@ -986,5 +992,6 @@ trInit();
 /* PWA */
 if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
 </script>
+<script src="learn.js"></script>
 </body>
 </html>
